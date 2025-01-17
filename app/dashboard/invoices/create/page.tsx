@@ -4,7 +4,7 @@ import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Create Invoice',
+  title: 'Crear Donaciones',
 };
 
 export default async function Page() {
