@@ -8,29 +8,29 @@ import { lusitana } from '@/app/ui/fonts';
 import { fetchCardData } from '@/app/lib/data';
 
 const iconMap = {
-  collected: BanknotesIcon,
-  customers: UserGroupIcon,
-  pending: ClockIcon,
-  invoices: InboxIcon,
+  recolectado: BanknotesIcon,
+  usuarios: UserGroupIcon,
+  pendiente: ClockIcon,
+  donaciones: InboxIcon,
 };
 
 export default async function CardWrapper() {
   const {
-    numberOfInvoices,
-    numberOfCustomers,
-    totalPaidInvoices,
-    totalPendingInvoices,
+    numeroDeDonaciones,
+    numeroDeUsuarios,
+    totalPagadoDonaciones,
+    totalPendienteDonaciones,
   } = await fetchCardData();
 
   return (
     <>
-      <Card title="Collected" value={totalPaidInvoices} type="collected" />
-      <Card title="Pending" value={totalPendingInvoices} type="pending" />
-      <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
+      <Card title="Recolectado" value={totalPagadoDonaciones} type="recolectado" />
+      <Card title="Pendiente" value={totalPendienteDonaciones} type="pendiente" />
+      <Card title="Total Donaciones" value={numeroDeDonaciones} type="donaciones" />
       <Card
-        title="Total Customers"
-        value={numberOfCustomers}
-        type="customers"
+        title="Total Usuarios"
+        value={numeroDeUsuarios}
+        type="usuarios"
       />
     </>
   );
@@ -43,7 +43,7 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: 'invoices' | 'customers' | 'pending' | 'collected';
+  type: 'donaciones' | 'usuarios' | 'pendiente' | 'recolectado';
 }) {
   const Icon = iconMap[type];
 

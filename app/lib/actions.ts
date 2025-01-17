@@ -10,23 +10,23 @@ import { AuthError } from 'next-auth';
 const FormSchema = z.object({
   id: z.string(),
   customerId: z.string({
-    invalid_type_error: 'Please select a customer.',
+    invalid_type_error: 'Selecciona un usuario.',
   }),
   amount: z.coerce
     .number()
-    .gt(0, { message: 'Please enter an amount greater than $0.' }),
-  status: z.enum(['pending', 'paid'], {
-    invalid_type_error: 'Please select an invoice status.',
+    .gt(0, { message: 'Selecciona una suma mayor a 0€.' }),
+  status: z.enum(['pendiente', 'pagado'], {
+    invalid_type_error: 'Seleciona un estado en la donación.',
   }),
   date: z.string(),
 });
 
-const CreateInvoice = FormSchema.omit({ id: true, date: true });
-const UpdateInvoice = FormSchema.omit({ date: true, id: true });
+const CrearDonacion = FormSchema.omit({ id: true, date: true });
+const EditarDonacion = FormSchema.omit({ date: true, id: true });
 
 export type State = {
   errors?: {
-    customerId?: string[];
+    usuarioId?: string[];
     amount?: string[];
     status?: string[];
   };
@@ -35,8 +35,8 @@ export type State = {
 
 export async function createInvoice(prevState: State, formData: FormData) {
   // Validate form fields using Zod
-  const validatedFields = CreateInvoice.safeParse({
-    customerId: formData.get('customerId'),
+  const validatedFields = CrearDonacion.safeParse({
+    usuarioId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
@@ -72,12 +72,12 @@ export async function createInvoice(prevState: State, formData: FormData) {
   redirect('/dashboard/invoices');
 }
 
-export async function updateInvoice(
+export async function editarDonacion(
   id: string,
   prevState: State,
   formData: FormData,
 ) {
-  const validatedFields = UpdateInvoice.safeParse({
+  const validatedFields = EditarDonacion.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),

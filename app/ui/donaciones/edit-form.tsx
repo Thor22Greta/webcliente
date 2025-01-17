@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
+import { UsuarioField, DonacionForm } from '@/app/lib/definitions';
 import {
   CheckIcon,
   ClockIcon,
@@ -9,42 +9,42 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateInvoice, State } from '@/app/lib/actions';
+import { editarDonacion, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 
-export default function EditInvoiceForm({
-  invoice,
-  customers,
+export default function EditarDonacionForm({
+  donacion,
+  usuarios,
 }: {
-  invoice: InvoiceForm;
-  customers: CustomerField[];
+  donacion: DonacionForm;
+  usuarios: UsuarioField[];
 }) {
   const initialState: State = { message: null, errors: {} };
-  const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
-  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
+  const editarDonacionWithId = editarDonacion.bind(null, donacion.id);
+  const [state, formAction] = useActionState(editarDonacionWithId, initialState);
 
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
-          <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
+          <label htmlFor="usuario" className="mb-2 block text-sm font-medium">
+            Seleccionar Usuario
           </label>
           <div className="relative">
             <select
-              id="customer"
-              name="customerId"
+              id="usuario"
+              name="usuarioId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue={invoice.customer_id}
+              defaultValue={donacion.usuario_id}
               aria-describedby="customer-error"
             >
               <option value="" disabled>
                 Select a customer
               </option>
-              {customers.map((customer) => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.name}
+              {usuarios.map((usuario) => (
+                <option key={usuario.id} value={usuario.id}>
+                  {usuario.name}
                 </option>
               ))}
             </select>
@@ -52,8 +52,8 @@ export default function EditInvoiceForm({
           </div>
 
           <div id="customer-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.customerId &&
-              state.errors.customerId.map((error: string) => (
+            {state.errors?.usuarioId &&
+              state.errors.usuarioId.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>
@@ -64,7 +64,7 @@ export default function EditInvoiceForm({
         {/* Invoice Amount */}
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Choose an amount
+            Selecciona una suma
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -72,9 +72,9 @@ export default function EditInvoiceForm({
                 id="amount"
                 name="amount"
                 type="number"
-                defaultValue={invoice.amount}
+                defaultValue={donacion.amount}
                 step="0.01"
-                placeholder="Enter USD amount"
+                placeholder="Introduce una suma en €"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="amount-error"
               />
