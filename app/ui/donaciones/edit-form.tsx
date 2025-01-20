@@ -28,19 +28,19 @@ export default function EditarDonacionForm({
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
-          <label htmlFor="usuario" className="mb-2 block text-sm font-medium">
+          <label htmlFor="customer" className="mb-2 block text-sm font-medium">
             Seleccionar Usuario
           </label>
           <div className="relative">
             <select
-              id="usuario"
-              name="usuarioId"
+              id="customer"
+              name="customerId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue={donacion.usuario_id}
               aria-describedby="customer-error"
             >
               <option value="" disabled>
-                Select a customer
+                Selecciona un usuario
               </option>
               {usuarios.map((usuario) => (
                 <option key={usuario.id} value={usuario.id}>
@@ -51,7 +51,7 @@ export default function EditarDonacionForm({
             <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
 
-          <div id="customer-error" aria-live="polite" aria-atomic="true">
+          <div id="usuario-error" aria-live="polite" aria-atomic="true">
             {state.errors?.usuarioId &&
               state.errors.usuarioId.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
@@ -82,7 +82,7 @@ export default function EditarDonacionForm({
             </div>
           </div>
 
-          <div id="amount-error" aria-live="polite" aria-atomic="true">
+          <div id="suma-error" aria-live="polite" aria-atomic="true">
             {state.errors?.suma &&
               state.errors.suma.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
@@ -101,15 +101,15 @@ export default function EditarDonacionForm({
             <div className="flex gap-4">
               <div className="flex items-center">
                 <input
-                  id="pendiente"
+                  id="pending"
                   name="status"
                   type="radio"
-                  value="pendiente"
+                  value="pending"
                   defaultChecked={donacion.status === 'pendiente'}
                   className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
-                  htmlFor="pendiente"
+                  htmlFor="pending"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
                   Pendiente <ClockIcon className="h-4 w-4" />
@@ -117,15 +117,15 @@ export default function EditarDonacionForm({
               </div>
               <div className="flex items-center">
                 <input
-                  id="pagado"
+                  id="paid"
                   name="status"
                   type="radio"
-                  value="pagado"
+                  value="paid"
                   defaultChecked={donacion.status === 'pagado'}
                   className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
-                  htmlFor="pagado"
+                  htmlFor="paid"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
                   Pagado <CheckIcon className="h-4 w-4" />

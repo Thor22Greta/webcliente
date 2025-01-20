@@ -14,7 +14,7 @@ export function CrearDonacion() {
   );
 }
 
-export function EditarDonacion({ id }: { id: string }) {
+export function EditarDonacion({ id }: { id?: string  }) {
   return (
     <Link
       href={`/dashboard/donaciones/${id}/editar`}
