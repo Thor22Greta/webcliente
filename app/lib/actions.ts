@@ -9,10 +9,10 @@ import { AuthError } from 'next-auth';
 
 const FormSchema = z.object({
   id: z.string(),
-  customerId: z.string({
+  usuarioId: z.string({
     invalid_type_error: 'Selecciona un usuario.',
   }),
-  amount: z.coerce
+  suma: z.coerce
     .number()
     .gt(0, { message: 'Selecciona una suma mayor a 0€.' }),
   status: z.enum(['pendiente', 'pagado'], {
@@ -27,17 +27,17 @@ const EditarDonacion = FormSchema.omit({ date: true, id: true });
 export type State = {
   errors?: {
     usuarioId?: string[];
-    amount?: string[];
+    suma?: string[];
     status?: string[];
   };
   message?: string | null;
 };
 
-export async function createInvoice(prevState: State, formData: FormData) {
+export async function crearDonacion(prevState: State, formData: FormData) {
   // Validate form fields using Zod
   const validatedFields = CrearDonacion.safeParse({
-    usuarioId: formData.get('customerId'),
-    amount: formData.get('amount'),
+    usuarioId: formData.get('usuarioId'),
+    suma: formData.get('suma'),
     status: formData.get('status'),
   });
 
@@ -45,20 +45,20 @@ export async function createInvoice(prevState: State, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Invoice.',
+      message: 'Error al crear la donación.',
     };
   }
 
   // Prepare data for insertion into the database
-  const { customerId, amount, status } = validatedFields.data;
-  const amountInCents = amount * 100;
+  const { usuarioId, suma, status } = validatedFields.data;
+  const sumaInCents = suma * 100;
   const date = new Date().toISOString().split('T')[0];
 
   // Insert data into the database
   try {
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+      VALUES (${usuarioId}, ${sumaInCents}, ${status}, ${date})
     `;
   } catch (error) {
     // If a database error occurs, return a more specific error.
@@ -68,8 +68,8 @@ export async function createInvoice(prevState: State, formData: FormData) {
   }
 
   // Revalidate the cache for the invoices page and redirect the user.
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');
+  revalidatePath('/dashboard/donaciones');
+  redirect('/dashboard/donaciones');
 }
 
 export async function editarDonacion(
@@ -78,8 +78,8 @@ export async function editarDonacion(
   formData: FormData,
 ) {
   const validatedFields = EditarDonacion.safeParse({
-    customerId: formData.get('customerId'),
-    amount: formData.get('amount'),
+    usuarioId: formData.get('usuarioId'),
+    suma: formData.get('suma'),
     status: formData.get('status'),
   });
 
@@ -90,26 +90,26 @@ export async function editarDonacion(
     };
   }
 
-  const { customerId, amount, status } = validatedFields.data;
-  const amountInCents = amount * 100;
+  const { usuarioId, suma, status } = validatedFields.data;
+  const sumaInCents = suma * 100;
 
   try {
     await sql`
       UPDATE invoices
-      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+      SET customer_id = ${usuarioId}, suma = ${sumaInCents}, status = ${status}
       WHERE id = ${id}
     `;
   } catch (error) {
     return { message: 'Database Error: Failed to Update Invoice.' };
   }
 
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');
+  revalidatePath('/dashboard/donaciones');
+  redirect('/dashboard/donaciones');
 }
 
-export async function deleteInvoice(id: string) {
+export async function eliminarDonacion(id: string) {
   await sql`DELETE FROM invoices WHERE id = ${id}`;
-  revalidatePath('/dashboard/invoices');
+  revalidatePath('/dashboard/donaciones');
 }
 
 export async function authenticate(

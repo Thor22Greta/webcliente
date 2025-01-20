@@ -72,7 +72,7 @@ export default function EditarDonacionForm({
                 id="amount"
                 name="amount"
                 type="number"
-                defaultValue={donacion.amount}
+                defaultValue={donacion.suma}
                 step="0.01"
                 placeholder="Introduce una suma en €"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -83,8 +83,8 @@ export default function EditarDonacionForm({
           </div>
 
           <div id="amount-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.amount &&
-              state.errors.amount.map((error: string) => (
+            {state.errors?.suma &&
+              state.errors.suma.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>
@@ -95,40 +95,40 @@ export default function EditarDonacionForm({
         {/* Invoice Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
-            Set the invoice status
+            ¿Cuál es el estado de la donación?
           </legend>
           <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
             <div className="flex gap-4">
               <div className="flex items-center">
                 <input
-                  id="pending"
+                  id="pendiente"
                   name="status"
                   type="radio"
-                  value="pending"
-                  defaultChecked={invoice.status === 'pending'}
+                  value="pendiente"
+                  defaultChecked={donacion.status === 'pendiente'}
                   className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
-                  htmlFor="pending"
+                  htmlFor="pendiente"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
-                  Pending <ClockIcon className="h-4 w-4" />
+                  Pendiente <ClockIcon className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">
                 <input
-                  id="paid"
+                  id="pagado"
                   name="status"
                   type="radio"
-                  value="paid"
-                  defaultChecked={invoice.status === 'paid'}
+                  value="pagado"
+                  defaultChecked={donacion.status === 'pagado'}
                   className="h-4 w-4 border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
-                  htmlFor="paid"
+                  htmlFor="pagado"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Paid <CheckIcon className="h-4 w-4" />
+                  Pagado <CheckIcon className="h-4 w-4" />
                 </label>
               </div>
             </div>
@@ -151,12 +151,12 @@ export default function EditarDonacionForm({
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/dashboard/invoices"
+          href="/dashboard/donaciones"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
-          Cancel
+          Cancelar
         </Link>
-        <Button type="submit">Edit Invoice</Button>
+        <Button type="submit">Editar Donación</Button>
       </div>
     </form>
   );

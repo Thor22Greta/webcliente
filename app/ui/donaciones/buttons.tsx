@@ -1,6 +1,6 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { EliminarDonacion } from '@/app/lib/actions';
+import { eliminarDonacion } from '@/app/lib/actions';
 
 export function CrearDonacion() {
   return (
@@ -26,12 +26,12 @@ export function EditarDonacion({ id }: { id: string }) {
 }
 
 export function EliminarDonacion({ id }: { id: string }) {
-  const EliminarDonacionWithId = EliminarDonacion.bind(null, id);
+  const EliminarDonacionWithId = eliminarDonacion.bind(null, id);
 
   return (
     <form action={EliminarDonacionWithId}>
       <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Delete</span>
+        <span className="sr-only">Eliminar</span>
         <TrashIcon className="w-5" />
       </button>
     </form>

@@ -45,16 +45,16 @@ export default async function UsuariosTable({
                     </div>
                     <div className="flex w-full items-center justify-between border-b py-5">
                       <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Pending</p>
-                        <p className="font-medium">{usuario.total_pending}</p>
+                        <p className="text-xs">Pendiente</p>
+                        <p className="font-medium">{usuario.total_pendiente}</p>
                       </div>
                       <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Paid</p>
-                        <p className="font-medium">{usuario.total_paid}</p>
+                        <p className="text-xs">Pagado</p>
+                        <p className="font-medium">{usuario.total_pagado}</p>
                       </div>
                     </div>
                     <div className="pt-4 text-sm">
-                      <p>{usuario.total_invoices} invoices</p>
+                      <p>{usuario.total_donaciones} donaciones</p>
                     </div>
                   </div>
                 ))}
@@ -99,13 +99,13 @@ export default async function UsuariosTable({
                         {usuario.email}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {usuario.total_invoices}
+                        {usuario.total_donaciones}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {usuario.total_pending}
+                        {usuario.total_pendiente}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                        {usuario.total_paid}
+                        {usuario.total_pagado}
                       </td>
                     </tr>
                   ))}

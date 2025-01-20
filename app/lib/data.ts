@@ -39,7 +39,7 @@ export async function fetchUltimasDonaciones() {
 
     const UltimasDonaciones = data.rows.map((donacion) => ({
       ...donacion,
-      amount: formatCurrency(donacion.amount),
+      amount: formatCurrency(donacion.suma),
     }));
     return UltimasDonaciones;
   } catch (error) {
@@ -152,13 +152,13 @@ export async function fetchDonacionById(id: string) {
       WHERE invoices.id = ${id};
     `;
 
-    const invoice = data.rows.map((invoice) => ({
-      ...invoice,
+    const donacion = data.rows.map((donacion) => ({
+      ...donacion,
       // Convert amount from cents to dollars
-      amount: invoice.amount / 100,
+      amount: donacion.suma / 100,
     }));
 
-    return invoice[0];
+    return donacion[0];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoice.');
@@ -205,8 +205,8 @@ export async function fetchFiltradosUsuarios(query: string) {
 
     const usuarios = data.rows.map((usuario) => ({
       ...usuario,
-      total_pending: formatCurrency(usuario.total_pending),
-      total_paid: formatCurrency(usuario.total_paid),
+      total_pendiente: formatCurrency(usuario.total_pendiente),
+      total_pagado: formatCurrency(usuario.total_pagado),
     }));
 
     return usuarios;
