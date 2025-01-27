@@ -37,9 +37,9 @@ export async function fetchUltimasDonaciones() {
       ORDER BY invoices.date DESC
       LIMIT 5`;
 
-    const UltimasDonaciones = data.rows.map((donacion) => ({
-      ...donacion,
-      amount: formatCurrency(donacion.suma),
+    const UltimasDonaciones = data.rows.map((invoices) => ({
+      ...invoices,
+      amount: formatCurrency(invoices.amount),
     }));
     return UltimasDonaciones;
   } catch (error) {
@@ -56,8 +56,8 @@ export async function fetchCardData() {
     const donacionCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const usuarioCountPromise = sql`SELECT COUNT(*) FROM customers`;
     const donacionStatusPromise = sql`SELECT
-         SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) AS "paid",
-         SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
+         SUM(CASE WHEN status = 'pagado' THEN amount ELSE 0 END) AS "pagado",
+         SUM(CASE WHEN status = 'pendiente' THEN amount ELSE 0 END) AS "pendiente"
          FROM invoices`;
 
     const data = await Promise.all([
@@ -152,13 +152,13 @@ export async function fetchDonacionById(id: string) {
       WHERE invoices.id = ${id};
     `;
 
-    const donacion = data.rows.map((donacion) => ({
-      ...donacion,
+    const invoices = data.rows.map((invoice) => ({
+      ...invoice,
       // Convert amount from cents to dollars
-      amount: donacion.suma / 100,
+      amount: invoice.amount / 100,
     }));
 
-    return donacion[0];
+    return invoices[0];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoice.');
@@ -192,8 +192,8 @@ export async function fetchFiltradosUsuarios(query: string) {
 		  customers.email,
 		  customers.image_url,
 		  COUNT(invoices.id) AS total_invoices,
-		  SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END) AS total_pending,
-		  SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
+		  SUM(CASE WHEN invoices.status = 'pendiente' THEN invoices.amount ELSE 0 END) AS total_pending,
+		  SUM(CASE WHEN invoices.status = 'pagado' THEN invoices.amount ELSE 0 END) AS total_paid
 		FROM customers
 		LEFT JOIN invoices ON customers.id = invoices.customer_id
 		WHERE
@@ -205,8 +205,8 @@ export async function fetchFiltradosUsuarios(query: string) {
 
     const usuarios = data.rows.map((usuario) => ({
       ...usuario,
-      total_pendiente: formatCurrency(usuario.total_pendiente),
-      total_pagado: formatCurrency(usuario.total_pagado),
+      total_pending: formatCurrency(usuario.total_pending),
+      total_paid: formatCurrency(usuario.total_paid),
     }));
 
     return usuarios;

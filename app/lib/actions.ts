@@ -12,7 +12,7 @@ const FormSchema = z.object({
   usuarioId: z.string({
     invalid_type_error: 'Selecciona un usuario.',
   }),
-  suma: z.coerce
+  amount: z.coerce
     .number()
     .gt(0, { message: 'Selecciona una suma mayor a 0€.' }),
   status: z.enum(['pendiente', 'pagado'], {
@@ -27,7 +27,7 @@ const EditarDonacion = FormSchema.omit({ date: true, id: true });
 export type State = {
   errors?: {
     usuarioId?: string[];
-    suma?: string[];
+    amount?: string[];
     status?: string[];
   };
   message?: string | null;
@@ -37,7 +37,7 @@ export async function crearDonacion(prevState: State, formData: FormData) {
   // Validate form fields using Zod
   const validatedFields = CrearDonacion.safeParse({
     usuarioId: formData.get('usuarioId'),
-    suma: formData.get('suma'),
+    amount: formData.get('amount'),
     status: formData.get('status'),
   });
 
@@ -50,15 +50,15 @@ export async function crearDonacion(prevState: State, formData: FormData) {
   }
 
   // Prepare data for insertion into the database
-  const { usuarioId, suma, status } = validatedFields.data;
-  const sumaInCents = suma * 100;
+  const { usuarioId, amount, status } = validatedFields.data;
+  const amountInCents = amount * 100;
   const date = new Date().toISOString().split('T')[0];
 
   // Insert data into the database
   try {
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${usuarioId}, ${sumaInCents}, ${status}, ${date})
+      VALUES (${usuarioId}, ${amountInCents}, ${status}, ${date})
     `;
   } catch (error) {
     // If a database error occurs, return a more specific error.
@@ -79,7 +79,7 @@ export async function editarDonacion(
 ) {
   const validatedFields = EditarDonacion.safeParse({
     usuarioId: formData.get('usuarioId'),
-    suma: formData.get('suma'),
+    amount: formData.get('amount'),
     status: formData.get('status'),
   });
 
@@ -90,13 +90,13 @@ export async function editarDonacion(
     };
   }
 
-  const { usuarioId, suma, status } = validatedFields.data;
-  const sumaInCents = suma * 100;
+  const { usuarioId, amount, status } = validatedFields.data;
+  const amountInCents = amount * 100;
 
   try {
     await sql`
       UPDATE invoices
-      SET customer_id = ${usuarioId}, suma = ${sumaInCents}, status = ${status}
+      SET customer_id = ${usuarioId}, amount = ${amountInCents}, status = ${status}
       WHERE id = ${id}
     `;
   } catch (error) {

@@ -8,6 +8,10 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
+import { PawPrint } from 'lucide-react';
+import { CalendarHeart } from 'lucide-react';
+import { HeartHandshake } from 'lucide-react';
+
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -19,6 +23,10 @@ const links = [
     icon: DocumentDuplicateIcon,
   },
   { name: 'Usuarios', href: '/dashboard/usuarios', icon: UserGroupIcon },
+  { name: 'Animales', href: '/dashboard/animales', icon: PawPrint},
+  { name: 'Eventos', href: '/dashboard/eventos', icon: CalendarHeart },
+  { name: 'Adopciones', href: '/dashboard/adopciones', icon: HeartHandshake },
+
 ];
 
 export default function NavLinks() {

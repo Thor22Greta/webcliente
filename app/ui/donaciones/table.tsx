@@ -20,7 +20,7 @@ export default async function DonacionTable({
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
-            {donaciones?.map((donacion: { id: string ; image_url: string | StaticImport; name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; email: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; status: any; suma: number; date: string; }) => (
+            {donaciones?.map((donacion: { id: string ; image_url: string | StaticImport; name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; email: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; status: any; amount: number; date: string; }) => (
               <div
                 key={donacion.id}
                 className="mb-2 w-full rounded-md bg-white p-4"
@@ -44,7 +44,7 @@ export default async function DonacionTable({
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
                     <p className="text-xl font-medium">
-                      {formatCurrency(donacion.suma)}
+                      {formatCurrency(donacion.amount)}
                     </p>
                     <p>{formatDateToLocal(donacion.date)}</p>
                   </div>
@@ -101,7 +101,7 @@ export default async function DonacionTable({
                     {donacion.email}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatCurrency(donacion.suma)}
+                    {formatCurrency(donacion.amount)}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatDateToLocal(donacion.date)}

@@ -46,15 +46,15 @@ export default async function UsuariosTable({
                     <div className="flex w-full items-center justify-between border-b py-5">
                       <div className="flex w-1/2 flex-col">
                         <p className="text-xs">Pendiente</p>
-                        <p className="font-medium">{usuario.total_pendiente}</p>
+                        <p className="font-medium">{usuario.total_pending}</p>
                       </div>
                       <div className="flex w-1/2 flex-col">
                         <p className="text-xs">Pagado</p>
-                        <p className="font-medium">{usuario.total_pagado}</p>
+                        <p className="font-medium">{usuario.total_paid}</p>
                       </div>
                     </div>
                     <div className="pt-4 text-sm">
-                      <p>{usuario.total_donaciones} donaciones</p>
+                      <p>{usuario.total_invoices} donaciones</p>
                     </div>
                   </div>
                 ))}
@@ -99,13 +99,13 @@ export default async function UsuariosTable({
                         {usuario.email}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {usuario.total_donaciones}
+                        {usuario.total_invoices}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {usuario.total_pendiente}
+                        {usuario.total_pending}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                        {usuario.total_pagado}
+                        {usuario.total_paid}
                       </td>
                     </tr>
                   ))}

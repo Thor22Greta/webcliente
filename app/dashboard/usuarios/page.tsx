@@ -16,6 +16,7 @@ export default async function Page(props: {
   const query = searchParams?.query || '';
 
   const usuarios = await fetchFiltradosUsuarios(query);
+  console.log(usuarios);
 
   return (
     <main>
