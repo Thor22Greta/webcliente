@@ -10,7 +10,7 @@ export default async function UsuariosTable({
 }) {
   return (
     <div className="w-full">
-      <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>
+      <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl text-green-600`}>
         Usuarios
       </h1>
       <Search placeholder="Buscando usuarios..." />
@@ -22,7 +22,7 @@ export default async function UsuariosTable({
                 {usuarios?.map((usuario) => (
                   <div
                     key={usuario.id}
-                    className="mb-2 w-full rounded-md bg-white p-4"
+                    className="mb-2 w-full rounded-md bg-green-100 p-4"
                   >
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
@@ -83,7 +83,7 @@ export default async function UsuariosTable({
                 <tbody className="divide-y divide-gray-200 text-gray-900">
                   {usuarios.map((usuario) => (
                     <tr key={usuario.id} className="group">
-                      <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
+                      <td className="whitespace-nowrap bg-green-100 py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                         <div className="flex items-center gap-3">
                           <Image
                             src={usuario.image_url}
@@ -95,16 +95,16 @@ export default async function UsuariosTable({
                           <p>{usuario.name}</p>
                         </div>
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap bg-green-100 px-4 py-5 text-sm">
                         {usuario.email}
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap bg-green-100 px-4 py-5 text-sm">
                         {usuario.total_invoices}
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap bg-green-100 px-4 py-5 text-sm">
                         {usuario.total_pending}
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
+                      <td className="whitespace-nowrap bg-green-100 px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
                         {usuario.total_paid}
                       </td>
                     </tr>

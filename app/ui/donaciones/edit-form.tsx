@@ -97,7 +97,7 @@ export default function EditarDonacionForm({
           <legend className="mb-2 block text-sm font-medium">
             ¿Cuál es el estado de la donación?
           </legend>
-          <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
+          <div className="rounded-md border border-gray-200 bg-green-100 px-[14px] py-3">
             <div className="flex gap-4">
               <div className="flex items-center">
                 <input

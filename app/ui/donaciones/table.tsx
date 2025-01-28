@@ -23,7 +23,7 @@ export default async function DonacionTable({
             {donaciones?.map((donacion: { id: string ; image_url: string | StaticImport; name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; email: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; status: any; amount: number; date: string; }) => (
               <div
                 key={donacion.id}
-                className="mb-2 w-full rounded-md bg-white p-4"
+                className="mb-2 w-full rounded-md bg-green-100 p-4"
               >
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
@@ -79,7 +79,7 @@ export default async function DonacionTable({
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white">
+            <tbody className="bg-green-100">
               {donaciones?.map((donacion) => (
                 <tr
                   key={donacion.id}

@@ -11,11 +11,11 @@ export default async function UltimasDonaciones() {
 
   return (
     <div className="flex w-full flex-col md:col-span-4">
-      <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
+      <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl text-green-600`}>
         Ultimas Donaciones
       </h2>
       <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
-        <div className="bg-white px-6">
+        <div className="bg-green-100 px-6">
           {UltimasDonaciones.map((donacion: { id: Key | null | undefined; image_url: string | StaticImport; name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; email: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; amount: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }, d: any) => {
             return (
               <div
@@ -45,7 +45,7 @@ export default async function UltimasDonaciones() {
                   </div>
                 </div>
                 <p
-                  className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
+                  className={`${lusitana.className} truncate text-sm text-green-600 font-medium md:text-base`}
                 >
                   {donacion.amount}
                 </p>
@@ -54,10 +54,12 @@ export default async function UltimasDonaciones() {
           })}
         </div>
         <div className="flex items-center pb-2 pt-6">
-          <ArrowPathIcon className="h-5 w-5 text-gray-500" />
-          <h3 className="ml-2 text-sm text-gray-500 ">Editado ahora</h3>
+          <ArrowPathIcon className="h-5 w-5 text-green-600" />
+          <h3 className="ml-2 text-sm text-green-600 ">Editado ahora</h3>
         </div>
       </div>
     </div>
   );
 }
+
+
