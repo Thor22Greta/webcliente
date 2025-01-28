@@ -72,7 +72,7 @@ export default function EditarDonacionForm({
                 id="amount"
                 name="amount"
                 type="number"
-                defaultValue={donacion.suma}
+                defaultValue={donacion.amount}
                 step="0.01"
                 placeholder="Introduce una suma en €"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -82,9 +82,9 @@ export default function EditarDonacionForm({
             </div>
           </div>
 
-          <div id="suma-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.suma &&
-              state.errors.suma.map((error: string) => (
+          <div id="amount-error" aria-live="polite" aria-atomic="true">
+            {state.errors?.amount &&
+              state.errors.amount.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>

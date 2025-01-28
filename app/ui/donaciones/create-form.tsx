@@ -75,8 +75,8 @@ export default function Form({ usuarios }: { usuarios: UsuarioField[] }) {
           </div>
 
           <div id="amount-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.suma &&
-              state.errors.suma.map((error: string) => (
+            {state.errors?.amount &&
+              state.errors.amount.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>
