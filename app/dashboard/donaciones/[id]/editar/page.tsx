@@ -32,7 +32,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           },
         ]}
       />
-      <Form donacion={donacion} usuarios={usuarios} />
+      <Form invoice={donacion} customers={usuarios} />
     </main>
   );
 }

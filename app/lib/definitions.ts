@@ -54,10 +54,11 @@ export type DonacionesTable = {
   image_url: string;
   date: string;
   amount: number;
-  status: 'pendiente' | 'pagado';
+  status: 'pending' | 'paid';
 };
 
 export type UsuariosTableType = {
+  adoptante_name: null;
   id: string;
   name: string;
   email: string;
@@ -66,6 +67,18 @@ export type UsuariosTableType = {
   total_pending: number;
   total_paid: number;
 };
+
+export type AnimalesTableType = {
+  id: string;
+  name: string;
+  raza: string;
+  image_url: string;
+  edad: number;
+  adopted: boolean;
+  customer_id: string | null;  
+  adoptante_name: string | null; 
+};
+
 
 export type FormattedUsuariosTable = {
   total_invoices: number;
@@ -77,14 +90,25 @@ export type FormattedUsuariosTable = {
   image_url: string;
 };
 
+export interface FormattedAnimalesTable {
+  external_id: number;
+  name: string;
+  raza: string;
+  image_url: string;
+  edad: number;
+  adopted: boolean;
+  customer_id: string | null;
+  adoptante_name: string | null; 
+}
+
 export type UsuarioField = {
   id: string;
   name: string;
 };
 
 export type DonacionForm = {
-  usuario_id: string | number | readonly string[] | undefined;
+  customer_id: string | number | readonly string[] | undefined;
   id: string;
   amount: number;
-  status: 'pendiente' | 'pagado';
+  status: 'pending' | 'paid';
 };

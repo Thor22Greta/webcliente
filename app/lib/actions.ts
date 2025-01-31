@@ -9,13 +9,13 @@ import { AuthError } from 'next-auth';
 
 const FormSchema = z.object({
   id: z.string(),
-  usuarioId: z.string({
+  customerId: z.string({
     invalid_type_error: 'Selecciona un usuario.',
   }),
   amount: z.coerce
     .number()
     .gt(0, { message: 'Selecciona una suma mayor a 0€.' }),
-  status: z.enum(['pendiente', 'pagado'], {
+  status: z.enum(['pending', 'paid'], {
     invalid_type_error: 'Seleciona un estado en la donación.',
   }),
   date: z.string(),
@@ -26,7 +26,7 @@ const EditarDonacion = FormSchema.omit({ date: true, id: true });
 
 export type State = {
   errors?: {
-    usuarioId?: string[];
+    customerId?: string[];
     amount?: string[];
     status?: string[];
   };
@@ -36,7 +36,7 @@ export type State = {
 export async function crearDonacion(prevState: State, formData: FormData) {
   // Validate form fields using Zod
   const validatedFields = CrearDonacion.safeParse({
-    usuarioId: formData.get('usuarioId'),
+    customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
@@ -50,7 +50,7 @@ export async function crearDonacion(prevState: State, formData: FormData) {
   }
 
   // Prepare data for insertion into the database
-  const { usuarioId, amount, status } = validatedFields.data;
+  const { customerId, amount, status } = validatedFields.data;
   const amountInCents = amount * 100;
   const date = new Date().toISOString().split('T')[0];
 
@@ -58,7 +58,7 @@ export async function crearDonacion(prevState: State, formData: FormData) {
   try {
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${usuarioId}, ${amountInCents}, ${status}, ${date})
+      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `;
   } catch (error) {
     // If a database error occurs, return a more specific error.
@@ -78,7 +78,7 @@ export async function editarDonacion(
   formData: FormData,
 ) {
   const validatedFields = EditarDonacion.safeParse({
-    usuarioId: formData.get('usuarioId'),
+    customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
@@ -90,13 +90,13 @@ export async function editarDonacion(
     };
   }
 
-  const { usuarioId, amount, status } = validatedFields.data;
+  const { customerId, amount, status } = validatedFields.data;
   const amountInCents = amount * 100;
 
   try {
     await sql`
       UPDATE invoices
-      SET customer_id = ${usuarioId}, amount = ${amountInCents}, status = ${status}
+      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
       WHERE id = ${id}
     `;
   } catch (error) {

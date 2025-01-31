@@ -56,8 +56,8 @@ export async function fetchCardData() {
     const donacionCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const usuarioCountPromise = sql`SELECT COUNT(*) FROM customers`;
     const donacionStatusPromise = sql`SELECT
-         SUM(CASE WHEN status = 'pagado' THEN amount ELSE 0 END) AS "pagado",
-         SUM(CASE WHEN status = 'pendiente' THEN amount ELSE 0 END) AS "pendiente"
+         SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) AS "paid",
+         SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
          FROM invoices`;
 
     const data = await Promise.all([
@@ -68,8 +68,8 @@ export async function fetchCardData() {
 
     const numeroDeDonaciones = Number(data[0].rows[0].count ?? '0');
     const numeroDeUsuarios = Number(data[1].rows[0].count ?? '0');
-    const totalPagadoDonaciones = formatCurrency(data[2].rows[0].pagado ?? '0');
-    const totalPendienteDonaciones = formatCurrency(data[2].rows[0].pendiente ?? '0');
+    const totalPagadoDonaciones = formatCurrency(data[2].rows[0].paid ?? '0');
+    const totalPendienteDonaciones = formatCurrency(data[2].rows[0].pending ?? '0');
 
     return {
       numeroDeUsuarios,
@@ -192,8 +192,8 @@ export async function fetchFiltradosUsuarios(query: string) {
 		  customers.email,
 		  customers.image_url,
 		  COUNT(invoices.id) AS total_invoices,
-		  SUM(CASE WHEN invoices.status = 'pendiente' THEN invoices.amount ELSE 0 END) AS total_pending,
-		  SUM(CASE WHEN invoices.status = 'pagado' THEN invoices.amount ELSE 0 END) AS total_paid
+		  SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END) AS total_pending,
+		  SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
 		FROM customers
 		LEFT JOIN invoices ON customers.id = invoices.customer_id
 		WHERE
@@ -214,4 +214,48 @@ export async function fetchFiltradosUsuarios(query: string) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch customer table.');
   }
+}
+
+export async function fetchFiltradosAnimales(query: string) {
+  try {
+    const data = await sql<UsuariosTableType>`
+    SELECT
+      animales.external_id,
+      animales.name,
+      animales.raza,
+      animales.image_url,
+      animales.edad,
+      animales.adopted,
+      animales.customer_id,
+      customers.name AS adoptante_name
+    FROM animales
+    LEFT JOIN customers ON animales.customer_id = customers.id
+    WHERE
+      animales.name ILIKE ${`%${query}%`} OR
+      animales.raza ILIKE ${`%${query}%`}
+    ORDER BY animales.name ASC
+    `;
+
+    const animales = data.rows.map((animal) => ({
+      ...animal,
+      adoptante_name: animal.adoptante_name || null,  // Asegúrate de mapear correctamente el nombre del adoptante
+    }));
+
+    return animales;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch animal table.');
+  }
+}
+
+// Ensure this file exports the fetchAnimalesPages function
+
+
+
+export async function fetchAnimalesPages(query: string): Promise<number> {
+
+  // Implementation of the function
+
+  return 10; // Example return value
+
 }
