@@ -18,6 +18,15 @@ export type Usuario = {
   image_url: string;
 };
 
+export type Animal = {
+  id: number;
+  name: string;
+  raza: string;
+  edad: number;
+  image_url: string;
+  adopted: boolean;
+};
+
 export type Donacion = {
   id: string;
   usuario_id: string;
@@ -32,6 +41,29 @@ export type Revenue = {
   month: string;
   revenue: number;
 };
+
+// Definimos un tipo de adopción
+export type Adopcion = {
+  cliente_id: string;
+  animal_id: number;
+  cliente_nombre: string;
+  animal_nombre: string;
+  fecha_adopcion: string;
+};
+
+// Para un "nuevo card" en el slider de animales adoptados
+export type AdoptionCard = {
+  cliente_id: string;
+  cliente_nombre: string;
+  animal_id: number;
+  animal_nombre: string;
+  raza: string;
+  edad: number;
+  image_url: string;
+  adoptado: boolean;
+  fecha_adopcion: string;
+};
+
 
 export type UltimasDonaciones = {
   id: string;

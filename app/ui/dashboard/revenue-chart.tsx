@@ -24,7 +24,7 @@ export default async function RevenueChart() {
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl text-green-600`}>
         Ingresos Recientes
       </h2>
-      <div className="rounded-xl bg-gray-50 p-4">
+      <div className="rounded-xl bg-green-50 p-4">
         <div className="sm:grid-cols-13 mt-0 grid grid-cols-12 items-end gap-2 rounded-md bg-green-100 p-4 md:gap-4">
           {/* y-axis */}
           <div
@@ -46,7 +46,7 @@ export default async function RevenueChart() {
                 }}
               ></div>
               {/* x-axis */}
-              <p className="-rotate-90 text-sm text-gray-700 sm:rotate-0">
+              <p className="-rotate-90 text-sm text-green-700 sm:rotate-0">
                 {month.month}
               </p>
             </div>

@@ -1,5 +1,6 @@
 import { fetchFiltradosAnimales } from '@/app/lib/data';
 import AnimalesTable from '@/app/ui/animales/table';
+import CrearAnimalForm from '@/app/ui/animales/CrearAnimalForm';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -16,10 +17,15 @@ export default async function Page(props: {
   const query = searchParams?.query || '';
 
   const animales = await fetchFiltradosAnimales(query);
-  console.log(animales);
 
   return (
     <main>
+      <h1 className="text-2xl text-green-600 font-bold mb-6">Crear Animal</h1>
+
+      {/* Formulario para crear un nuevo animal */}
+      <CrearAnimalForm />
+
+      {/* Tabla con los animales existentes */}
       <AnimalesTable animales={animales} />
     </main>
   );

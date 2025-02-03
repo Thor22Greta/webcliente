@@ -17,7 +17,7 @@ export default async function UsuariosTable({
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
+            <div className="overflow-hidden rounded-md bg-green-50 p-2 md:pt-0">
               <div className="md:hidden">
                 {usuarios?.map((usuario) => (
                   <div
@@ -38,7 +38,7 @@ export default async function UsuariosTable({
                             <p>{usuario.name}</p>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-green-500">
                           {usuario.email}
                         </p>
                       </div>
@@ -59,8 +59,8 @@ export default async function UsuariosTable({
                   </div>
                 ))}
               </div>
-              <table className="hidden min-w-full rounded-md text-gray-900 md:table">
-                <thead className="rounded-md bg-gray-50 text-left text-sm font-normal">
+              <table className="hidden min-w-full rounded-md text-green-900 md:table">
+                <thead className="rounded-md bg-green-50 text-left text-sm font-normal">
                   <tr>
                     <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                       Nombre
@@ -80,7 +80,7 @@ export default async function UsuariosTable({
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-gray-200 text-gray-900">
+                <tbody className="divide-y divide-green-200 text-green-900">
                   {usuarios.map((usuario) => (
                     <tr key={usuario.id} className="group">
                       <td className="whitespace-nowrap bg-green-100 py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">

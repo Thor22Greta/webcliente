@@ -18,7 +18,7 @@ export function EditarDonacion({ id }: { id?: string  }) {
   return (
     <Link
       href={`/dashboard/donaciones/${id}/editar`}
-      className="rounded-md border p-2 hover:bg-gray-100"
+      className="rounded-md border p-2 hover:bg-green-100"
     >
       <PencilIcon className="w-5" />
     </Link>
@@ -30,7 +30,7 @@ export function EliminarDonacion({ id }: { id: string }) {
 
   return (
     <form action={EliminarDonacionWithId}>
-      <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+      <button type="submit" className="rounded-md border p-2 hover:bg-green-100">
         <span className="sr-only">Eliminar</span>
         <TrashIcon className="w-5" />
       </button>

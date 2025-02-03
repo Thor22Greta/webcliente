@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 
+// Definición del esquema para la creación de donaciones
 const FormSchema = z.object({
   id: z.string(),
   customerId: z.string({
@@ -16,32 +17,34 @@ const FormSchema = z.object({
     .number()
     .gt(0, { message: 'Selecciona una suma mayor a 0€.' }),
   status: z.enum(['pending', 'paid'], {
-    invalid_type_error: 'Seleciona un estado en la donación.',
+    invalid_type_error: 'Selecciona un estado en la donación.',
   }),
   date: z.string(),
 });
 
+// Creación y edición de donaciones
 const CrearDonacion = FormSchema.omit({ id: true, date: true });
 const EditarDonacion = FormSchema.omit({ date: true, id: true });
 
+// Tipado de estado
 export type State = {
   errors?: {
     customerId?: string[];
     amount?: string[];
     status?: string[];
   };
-  message?: string | null;
+  message?: string | null; // Permite que 'message' sea null o undefined
 };
 
+// Función para crear una donación
 export async function crearDonacion(prevState: State, formData: FormData) {
-  // Validate form fields using Zod
+  // Validar los campos del formulario
   const validatedFields = CrearDonacion.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
 
-  // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -49,29 +52,29 @@ export async function crearDonacion(prevState: State, formData: FormData) {
     };
   }
 
-  // Prepare data for insertion into the database
   const { customerId, amount, status } = validatedFields.data;
   const amountInCents = amount * 100;
   const date = new Date().toISOString().split('T')[0];
 
-  // Insert data into the database
   try {
+    // Insertar en la base de datos
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date)
       VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `;
   } catch (error) {
-    // If a database error occurs, return a more specific error.
+    // Error en la base de datos
     return {
       message: 'Database Error: Failed to Create Invoice.',
     };
   }
 
-  // Revalidate the cache for the invoices page and redirect the user.
+  // Revalidar el cache y redirigir
   revalidatePath('/dashboard/donaciones');
   redirect('/dashboard/donaciones');
 }
 
+// Función para editar una donación
 export async function editarDonacion(
   id: string,
   prevState: State,
@@ -107,11 +110,13 @@ export async function editarDonacion(
   redirect('/dashboard/donaciones');
 }
 
+// Función para eliminar una donación
 export async function eliminarDonacion(id: string) {
   await sql`DELETE FROM invoices WHERE id = ${id}`;
   revalidatePath('/dashboard/donaciones');
 }
 
+// Función de autenticación
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
@@ -128,5 +133,78 @@ export async function authenticate(
       }
     }
     throw error;
+  }
+}
+
+// Esquema para la creación de usuarios
+const UsuarioFormSchema = z.object({
+  name: z.string().min(1, { message: 'El nombre es obligatorio.' }),
+  email: z.string().email({ message: 'Debe ser un correo electrónico válido.' }),
+  status: z.enum(['active', 'inactive'], {
+    invalid_type_error: 'Selecciona un estado válido para el usuario.',
+  }),
+});
+
+const CrearUsuario = UsuarioFormSchema.omit({});
+
+export type UserState = {
+  errors?: {
+    name?: string[];
+    email?: string[];
+    status?: string[];
+  };
+  message?: string | null; // Permite que 'message' sea null o undefined
+};
+
+// Función para crear un usuario
+export async function crearUsuario(prevState: State, formData: FormData) {
+  // Validar los campos del formulario
+  const validatedFields = CrearUsuario.safeParse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Error al crear el usuario.',
+    };
+  }
+
+  const { name, email} = validatedFields.data;
+
+  try {
+    await sql`
+      INSERT INTO users (name, email)
+      VALUES (${name}, ${email})
+    `;
+  } catch (error) {
+    return {
+      message: 'Error en la base de datos al crear el usuario.',
+    };
+  }
+
+  revalidatePath('/dashboard/usuarios');
+  redirect('/dashboard/usuarios');
+}
+
+export async function crearAnimal(animal: { nombre: string; raza: string; edad: number; imagen: File | null }) {
+  // Lógica para enviar los datos al servidor o base de datos
+  // Por ejemplo, utilizando fetch:
+  const formData = new FormData();
+  formData.append('nombre', animal.nombre);
+  formData.append('raza', animal.raza);
+  formData.append('edad', animal.edad.toString());
+  if (animal.imagen) {
+    formData.append('imagen', animal.imagen);
+  }
+
+  const response = await fetch('/api/animales', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al crear el animal');
   }
 }

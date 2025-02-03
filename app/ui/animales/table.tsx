@@ -17,7 +17,7 @@ export default async function AnimalesTable({
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
+            <div className="overflow-hidden rounded-md bg-green-50 p-2 md:pt-0">
               <div className="md:hidden">
               {animales?.map((animal) => (
                 <div key={animal.id} 
@@ -28,7 +28,7 @@ export default async function AnimalesTable({
                         <div className="mb-2 flex items-center">
                           <div className="flex items-center gap-3">
                             <Image
-                              src="/public/animales/beagle.jpg"
+                              src="/animales/beagle.jpg"
                               className="rounded-full"
                               alt={`${animal.name}'s profile picture`}
                               width={28}
@@ -37,12 +37,12 @@ export default async function AnimalesTable({
                             <p>{animal.name}</p>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-500">{animal.raza}</p>
-                        <p className="text-sm text-gray-500">{animal.edad} años</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-green-500">{animal.raza}</p>
+                        <p className="text-sm text-green-500">{animal.edad} años</p>
+                        <p className="text-sm text-green-500">
                           {animal.adopted ? 'Adoptado' : 'No adoptado'}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-green-500">
                           {animal.adopted ? animal.adoptante_name : 'No disponible'}
                         </p>
                       </div>
@@ -52,8 +52,8 @@ export default async function AnimalesTable({
               </div>
 
               {/* Tabla para pantallas grandes */}
-              <table className="hidden min-w-full rounded-md text-gray-900 md:table">
-                <thead className="rounded-md bg-gray-50 text-left text-sm font-normal">
+              <table className="hidden min-w-full rounded-md text-green-900 md:table">
+                <thead className="rounded-md bg-green-50 text-left text-sm font-normal">
                   <tr>
                     <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                       Nombre
@@ -73,7 +73,7 @@ export default async function AnimalesTable({
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-gray-200 text-gray-900">
+                <tbody className="divide-y divide-green-200 text-green-900">
   {animales.map((animal) => (
     <tr key={animal.id || animal.name}> {/* Usa `animal.id` si está disponible */}
       <td className="whitespace-nowrap bg-green-100 py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">

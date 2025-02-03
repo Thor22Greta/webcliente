@@ -13,7 +13,7 @@ export default function Page() {
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div className="flex flex-col justify-center gap-6 rounded-lg bg-green-200 px-6 py-10 md:w-2/5 md:px-20">
           <p
-            className={`${lusitana.className} text-xl text-gray-800 md:text-3xl md:leading-normal`}
+            className={`${lusitana.className} text-xl text-green-800 md:text-3xl md:leading-normal`}
           >
             <strong>Bienvenido a AVA.</strong> Visita nuestro Instagram{' '}
             <a href="https://www.instagram.com/animalistesvalldalbaida/" className="text-green-500">

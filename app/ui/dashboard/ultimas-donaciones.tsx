@@ -14,7 +14,7 @@ export default async function UltimasDonaciones() {
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl text-green-600`}>
         Ultimas Donaciones
       </h2>
-      <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
+      <div className="flex grow flex-col justify-between rounded-xl bg-green-50 p-4">
         <div className="bg-green-100 px-6">
           {UltimasDonaciones.map((donacion: { id: Key | null | undefined; image_url: string | StaticImport; name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; email: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; amount: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }, d: any) => {
             return (
@@ -39,7 +39,7 @@ export default async function UltimasDonaciones() {
                     <p className="truncate text-sm font-semibold md:text-base">
                       {donacion.name}
                     </p>
-                    <p className="hidden text-sm text-gray-500 sm:block">
+                    <p className="hidden text-sm text-green-500 sm:block">
                       {donacion.email}
                     </p>
                   </div>

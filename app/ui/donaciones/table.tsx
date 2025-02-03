@@ -18,7 +18,7 @@ export default async function DonacionTable({
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+        <div className="rounded-lg bg-green-50 p-2 md:pt-0">
           <div className="md:hidden">
             {donaciones?.map((donacion: { id: string ; image_url: string | StaticImport; name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; email: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; status: any; amount: number; date: string; }) => (
               <div
@@ -37,7 +37,7 @@ export default async function DonacionTable({
                       />
                       <p>{donacion.name}</p>
                     </div>
-                    <p className="text-sm text-gray-500">{donacion.email}</p>
+                    <p className="text-sm text-green-500">{donacion.email}</p>
                   </div>
                   <DonacionStatus status={donacion.status} />
                 </div>
@@ -56,7 +56,7 @@ export default async function DonacionTable({
               </div>
             ))}
           </div>
-          <table className="hidden min-w-full text-gray-900 md:table">
+          <table className="hidden min-w-full text-green-900 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">

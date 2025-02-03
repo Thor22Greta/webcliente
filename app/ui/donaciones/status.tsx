@@ -7,7 +7,7 @@ export default function DonacionStatus({ status }: { status: string }) {
       className={clsx(
         'inline-flex items-center rounded-full px-2 py-1 text-xs',
         {
-          'bg-gray-100 text-gray-500': status === 'pending',
+          'bg-green-100 text-green-500': status === 'pending',
           'bg-green-500 text-white': status === 'paid',
         },
       )}
@@ -15,7 +15,7 @@ export default function DonacionStatus({ status }: { status: string }) {
       {status === 'pending' ? (
         <>
           Pendiente
-          <ClockIcon className="ml-1 w-4 text-gray-500" />
+          <ClockIcon className="ml-1 w-4 text-green-500" />
         </>
       ) : null}
       {status === 'paid' ? (
