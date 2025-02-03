@@ -27,13 +27,13 @@ export default async function AnimalesTable({
                       <div>
                         <div className="mb-2 flex items-center">
                           <div className="flex items-center gap-3">
-                            <Image
-                              src="/animales/beagle.jpg"
-                              className="rounded-full"
-                              alt={`${animal.name}'s profile picture`}
-                              width={28}
-                              height={28}
-                            />
+                          <Image
+                          src={animal.image_url}  // Asume que la propiedad image de cada animal tiene la URL de la imagen
+                          className="rounded-full"
+                          alt={`${animal.name}'s profile picture`}
+                          width={28}
+                         height={28}
+                          />
                             <p>{animal.name}</p>
                           </div>
                         </div>
@@ -79,7 +79,7 @@ export default async function AnimalesTable({
       <td className="whitespace-nowrap bg-green-100 py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
         <div className="flex items-center gap-3">
         <Image
-  src="/animales/beagle.jpg"
+  src={animal.image_url}  // Asegúrate de que `animal.image_url` contenga la ruta correcta de cada imagen
   className="rounded-full"
   alt={`${animal.name}'s profile picture`}
   width={28}
