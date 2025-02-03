@@ -20,8 +20,7 @@ export default async function AnimalesTable({
             <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
               <div className="md:hidden">
               {animales?.map((animal) => (
-                <div
-                 key={animal.external_id} // Cambié el key a animal.external_id (asegúrate de que sea único)
+                <div key={animal.id} 
                   className="mb-2 w-full rounded-md bg-green-100 p-4"
                           >
                     <div className="flex items-center justify-between border-b pb-4">
@@ -29,7 +28,7 @@ export default async function AnimalesTable({
                         <div className="mb-2 flex items-center">
                           <div className="flex items-center gap-3">
                             <Image
-                              src={animal.image_url}
+                              src="/public/animales/beagle.jpg"
                               className="rounded-full"
                               alt={`${animal.name}'s profile picture`}
                               width={28}
@@ -76,16 +75,16 @@ export default async function AnimalesTable({
 
                 <tbody className="divide-y divide-gray-200 text-gray-900">
   {animales.map((animal) => (
-    <tr key={animal.external_id || animal.name}> {/* Usa `animal.id` si está disponible */}
+    <tr key={animal.id || animal.name}> {/* Usa `animal.id` si está disponible */}
       <td className="whitespace-nowrap bg-green-100 py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
         <div className="flex items-center gap-3">
-          <Image
-            src={animal.image_url}
-            className="rounded-full"
-            alt={`${animal.name}'s profile picture`}
-            width={28}
-            height={28}
-          />
+        <Image
+  src="/animales/beagle.jpg"
+  className="rounded-full"
+  alt={`${animal.name}'s profile picture`}
+  width={28}
+  height={28}
+/>
           <p>{animal.name}</p>
         </div>
       </td>

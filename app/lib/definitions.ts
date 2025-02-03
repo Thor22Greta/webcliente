@@ -69,7 +69,7 @@ export type UsuariosTableType = {
 };
 
 export type AnimalesTableType = {
-  id: string;
+  id: number;
   name: string;
   raza: string;
   image_url: string;
@@ -91,7 +91,7 @@ export type FormattedUsuariosTable = {
 };
 
 export interface FormattedAnimalesTable {
-  external_id: number;
+  id: number;
   name: string;
   raza: string;
   image_url: string;

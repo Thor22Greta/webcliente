@@ -5,6 +5,7 @@ import {
   DonacionForm,
   DonacionesTable,
   UltimasDonacionesRaw,
+  AnimalesTableType,
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
@@ -218,7 +219,7 @@ export async function fetchFiltradosUsuarios(query: string) {
 
 export async function fetchFiltradosAnimales(query: string) {
   try {
-    const data = await sql<UsuariosTableType>`
+    const data = await sql<AnimalesTableType>`
     SELECT
       animales.external_id,
       animales.name,
