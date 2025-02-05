@@ -188,23 +188,50 @@ export async function crearUsuario(prevState: State, formData: FormData) {
   redirect('/dashboard/usuarios');
 }
 
-export async function crearAnimal(animal: { nombre: string; raza: string; edad: number; imagen: File | null }) {
-  // Lógica para enviar los datos al servidor o base de datos
-  // Por ejemplo, utilizando fetch:
-  const formData = new FormData();
-  formData.append('nombre', animal.nombre);
-  formData.append('raza', animal.raza);
-  formData.append('edad', animal.edad.toString());
-  if (animal.imagen) {
-    formData.append('imagen', animal.imagen);
-  }
-
-  const response = await fetch('/api/animales', {
-    method: 'POST',
-    body: formData,
-  });
-
-  if (!response.ok) {
-    throw new Error('Error al crear el animal');
+export async function agregarAnimal({
+  name,
+  raza,
+  edad,
+  adopted,
+  customerId,
+}: {
+  name: string;
+  raza: string;
+  edad: number;
+  adopted: boolean;
+  customerId?: string;
+}) {
+  try {
+    await sql`
+      INSERT INTO animales (name, raza, edad, adopted, customer_id)
+      VALUES (${name}, ${raza}, ${edad}, ${adopted}, ${customerId || null})
+    `;
+  } catch (error) {
+    console.error('Error al agregar animal:', error);
+    throw new Error('No se pudo agregar el animal.');
   }
 }
+
+// eliminarAnimal.ts en la carpeta `lib/actions`
+
+export async function eliminarAnimal(id: string) {
+  try {
+    const response = await fetch(`/api/animales/${id}`, {
+      method: 'DELETE', // Método HTTP DELETE
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Hubo un problema al eliminar el animal');
+    }
+
+    // Si todo está bien, puedes devolver una respuesta o manejar la UI de alguna manera
+    alert('Animal eliminado correctamente');
+    window.location.reload(); // Recargar la página para reflejar el cambio
+  } catch (error) {
+    console.error('Error al eliminar el animal:', error);
+  }
+}
+

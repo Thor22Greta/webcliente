@@ -1,6 +1,6 @@
 import { fetchFiltradosAnimales } from '@/app/lib/data';
 import AnimalesTable from '@/app/ui/animales/table';
-import CrearAnimalForm from '@/app/ui/animales/CrearAnimalForm';
+import CrearAnimalForm from '@/app/ui/animales/create-form';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -14,8 +14,9 @@ export default async function Page(props: {
   }>;
 }) {
   const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
+  const query = searchParams?.query || '';  // Si no hay búsqueda, usar un string vacío
 
+  // Obtener los animales filtrados según el query
   const animales = await fetchFiltradosAnimales(query);
 
   return (

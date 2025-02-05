@@ -220,34 +220,33 @@ export async function fetchFiltradosUsuarios(query: string) {
 export async function fetchFiltradosAnimales(query: string) {
   try {
     const data = await sql<AnimalesTableType>`
-    SELECT
-      animales.external_id,
-      animales.name,
-      animales.raza,
-      animales.image_url,
-      animales.edad,
-      animales.adopted,
-      animales.customer_id,
-      customers.name AS adoptante_name
-    FROM animales
-    LEFT JOIN customers ON animales.customer_id = customers.id
-    WHERE
-      animales.name ILIKE ${`%${query}%`} OR
-      animales.raza ILIKE ${`%${query}%`}
-    ORDER BY animales.name ASC
+      SELECT
+        animales.external_id,
+        animales.name,
+        animales.raza,
+        animales.image_url,
+        animales.edad,
+        animales.adopted,
+        animales.customer_id,
+        customers.name AS adoptante_name
+      FROM animales
+      LEFT JOIN customers ON animales.customer_id = customers.id
+      WHERE
+        animales.name ILIKE ${`%${query}%`} OR
+        animales.raza ILIKE ${`%${query}%`}
+      ORDER BY animales.name ASC
     `;
 
-    const animales = data.rows.map((animal) => ({
+    return data.rows.map((animal) => ({
       ...animal,
-      adoptante_name: animal.adoptante_name || null,  // Asegúrate de mapear correctamente el nombre del adoptante
+      adoptante_name: animal.adoptante_name || null, // Manejo de NULL en adoptante
     }));
-
-    return animales;
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch animal table.');
   }
 }
+
 
 // Ensure this file exports the fetchAnimalesPages function
 

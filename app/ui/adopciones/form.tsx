@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import { Usuario, FormattedAnimalesTable } from '@/app/lib/definitions';
 
@@ -11,13 +12,18 @@ export default function AdoptionForm({ usuarios, animales }: AdoptionFormProps) 
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
   const [selectedUsuario, setSelectedUsuario] = useState<string | null>(null);
 
-  const handleAdoptar = async (e: React.FormEvent) => {
+  const handleAdoptar = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!selectedAnimal || !selectedUsuario) return;
 
-    // Aquí harías la lógica para actualizar el animal a "adoptado"
-    // y asociarlo al usuario (adoptante) en tu base de datos.
+    // Lógica para actualizar el estado del animal a "adoptado"
+    // y asociarlo al usuario (adoptante) en la aplicación.
+    const updatedAnimales = animales.map((animal) =>
+      animal.id === Number(selectedAnimal) ? { ...animal, adoptedBy: selectedUsuario } : animal
+    );
+
+    console.log('Animales actualizados:', updatedAnimales);
     console.log(`Adoptante: ${selectedUsuario}, Animal: ${selectedAnimal}`);
   };
 
@@ -34,9 +40,14 @@ export default function AdoptionForm({ usuarios, animales }: AdoptionFormProps) 
             className="w-full px-4 py-2 border rounded-md"
           >
             <option value="">Seleccione un animal</option>
-            {animales.map((animal) => (
-              <option key={animal.id} value={animal.id}>{animal.name}</option>
-            ))}
+            {animales.map((animal) => {
+              console.log(animal.id); // Verificar que los ID de los animales sean únicos
+              return (
+                <option key={animal.id} value={animal.id}>
+                  {animal.name}
+                </option>
+              );
+            })}
           </select>
         </div>
 
@@ -49,9 +60,14 @@ export default function AdoptionForm({ usuarios, animales }: AdoptionFormProps) 
             className="w-full px-4 py-2 border rounded-md"
           >
             <option value="">Seleccione un adoptante</option>
-            {usuarios.map((usuario) => (
-              <option key={usuario.id} value={usuario.id}>{usuario.name}</option>
-            ))}
+            {usuarios.map((usuario) => {
+              console.log(usuario.id); // Verificar que los ID de los usuarios sean únicos
+              return (
+                <option key={usuario.id} value={usuario.id}>
+                  {usuario.name}
+                </option>
+              );
+            })}
           </select>
         </div>
 

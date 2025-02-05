@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
 import { FormattedAnimalesTable } from '@/app/lib/definitions';
+import { EditarAnimal, EliminarAnimal } from './buttons'; // Los botones serán importados
 
 export default async function AnimalesTable({
   animales,
@@ -18,22 +19,23 @@ export default async function AnimalesTable({
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden rounded-md bg-green-50 p-2 md:pt-0">
+              {/* Vista para pantallas pequeñas */}
               <div className="md:hidden">
-              {animales?.map((animal) => (
-                <div key={animal.id} 
-                  className="mb-2 w-full rounded-md bg-green-100 p-4"
-                          >
+                {animales?.map((animal) => (
+                  <div key={animal.id} className="mb-2 w-full rounded-md bg-green-100 p-4">
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
                         <div className="mb-2 flex items-center">
                           <div className="flex items-center gap-3">
-                          <Image
-                          src={animal.image_url}  // Asume que la propiedad image de cada animal tiene la URL de la imagen
-                          className="rounded-full"
-                          alt={`${animal.name}'s profile picture`}
-                          width={28}
-                         height={28}
-                          />
+                            {animal.image_url && (
+                              <Image
+                                src={animal.image_url}
+                                className="rounded-full"
+                                alt={`${animal.name}'s profile picture`}
+                                width={28}
+                                height={28}
+                              />
+                            )}
                             <p>{animal.name}</p>
                           </div>
                         </div>
@@ -45,6 +47,11 @@ export default async function AnimalesTable({
                         <p className="text-sm text-green-500">
                           {animal.adopted ? animal.adoptante_name : 'No disponible'}
                         </p>
+                      </div>
+                      <div className="flex gap-2">
+                        {/* Botones de acción */}
+                        <EditarAnimal id={animal.id ? Number(animal.id) : 0} />
+                        <EliminarAnimal id={animal.id ? Number(animal.id) : 0} />
                       </div>
                     </div>
                   </div>
@@ -70,39 +77,47 @@ export default async function AnimalesTable({
                     <th scope="col" className="px-4 py-5 font-medium">
                       Adoptante
                     </th>
+                    <th scope="col" className="px-4 py-5 font-medium">
+                      Acciones
+                    </th>
                   </tr>
                 </thead>
 
                 <tbody className="divide-y divide-green-200 text-green-900">
-  {animales.map((animal) => (
-    <tr key={animal.id || animal.name}> {/* Usa `animal.id` si está disponible */}
-      <td className="whitespace-nowrap bg-green-100 py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
-        <div className="flex items-center gap-3">
-        <Image
-  src={animal.image_url}  // Asegúrate de que `animal.image_url` contenga la ruta correcta de cada imagen
-  className="rounded-full"
-  alt={`${animal.name}'s profile picture`}
-  width={28}
-  height={28}
-/>
-          <p>{animal.name}</p>
-        </div>
-      </td>
-      <td className="whitespace-nowrap bg-green-100 px-4 py-5 text-sm">
-        {animal.raza}
-      </td>
-      <td className="whitespace-nowrap bg-green-100 px-4 py-5 text-sm">
-        {animal.edad}
-      </td>
-      <td className="whitespace-nowrap bg-green-100 px-4 py-5 text-sm">
-        {animal.adopted ? 'Sí' : 'No'}
-      </td>
-      <td className="whitespace-nowrap bg-green-100 px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-        {animal.adopted ? animal.adoptante_name : 'No adoptado'}
-      </td>
-    </tr>
-  ))}
-</tbody>
+                  {animales.map((animal) => (
+                    <tr
+                      key={animal.id}
+                      className="whitespace-nowrap bg-green-100 py-5 pl-4 pr-3 text-sm text-black"
+                    >
+                      <td className="px-4 py-5 sm:pl-6">
+                        <div className="flex items-center gap-3">
+                          {animal.image_url && (
+                            <Image
+                              src={animal.image_url}
+                              className="rounded-full"
+                              alt={`${animal.name}'s profile picture`}
+                              width={28}
+                              height={28}
+                            />
+                          )}
+                          <p>{animal.name}</p>
+                        </div>
+                      </td>
+                      <td className="px-4 py-5">{animal.raza}</td>
+                      <td className="px-4 py-5">{animal.edad}</td>
+                      <td className="px-4 py-5">{animal.adopted ? 'Sí' : 'No'}</td>
+                      <td className="px-4 py-5">
+                        {animal.adopted ? animal.adoptante_name : 'No adoptado'}
+                      </td>
+                      <td className="px-4 py-5">
+                        <div className="flex gap-2">
+                          <EditarAnimal id={animal.id ? Number(animal.id) : 0} />
+                          <EliminarAnimal id={animal.id ? Number(animal.id) : 0} />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </div>
           </div>
