@@ -3,7 +3,7 @@ import { FormattedAnimalesTable } from '@/app/lib/definitions';
 export default function AdoptedAnimalsSlider({ animales }: { animales: FormattedAnimalesTable[] }) {
   return (
     <div className="mt-8">
-      <h2 className="text-xl mb-4">Animales Adoptados</h2>
+      <h2 className="lusitana_e85447be-module__j818aG__className text-2xl text-green-600">Animales Adoptados</h2>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
         {animales.map((animal) => (
           <div key={animal.id} className="bg-green-100 p-4 rounded-lg">

@@ -21,7 +21,7 @@ export default async function Page(props: {
 
   return (
     <main>
-      <h1 className="text-2xl text-green-600 font-bold mb-6">Crear Animal</h1>
+      <h1 className="lusitana_e85447be-module__j818aG__className mb-8 text-xl md:text-2xl text-green-600">Crear Animal</h1>
 
       {/* Formulario para crear un nuevo animal */}
       <CrearAnimalForm />

@@ -212,7 +212,6 @@ export async function agregarAnimal({
   }
 }
 
-// eliminarAnimal.ts en la carpeta `lib/actions`
 
 export async function eliminarAnimal(id: string) {
   try {
@@ -235,3 +234,42 @@ export async function eliminarAnimal(id: string) {
   }
 }
 
+export async function obtenerAnimalPorId(id: string) {
+  try {
+    const result = await sql`SELECT * FROM animales WHERE id = ${id}`;
+    
+    if (result.rowCount === 0) {
+      throw new Error('Animal no encontrado');
+    }
+
+    return result.rows[0];
+  } catch (error) {
+    console.error('Error al obtener el animal:', error);
+    throw new Error('No se pudo obtener el animal.');
+  }
+}
+
+// Función para actualizar un animal
+export async function actualizarAnimal(animal: {
+  id: string;
+  name: string;
+  raza: string;
+  edad: number;
+  adopted: boolean;
+  customerId?: string;
+}) {
+  try {
+    await sql`
+      UPDATE animales
+      SET name = ${animal.name}, 
+          raza = ${animal.raza}, 
+          edad = ${animal.edad}, 
+          adopted = ${animal.adopted}, 
+          customer_id = ${animal.customerId || null}
+      WHERE id = ${animal.id}
+    `;
+  } catch (error) {
+    console.error('Error al actualizar el animal:', error);
+    throw new Error('No se pudo actualizar el animal.');
+  }
+}

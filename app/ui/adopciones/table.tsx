@@ -8,7 +8,7 @@ export default function AdopcionesTable({
 }) {
   return (
     <div className="w-full">
-      <h1 className="text-xl md:text-2xl text-green-600 mb-6">Animales Disponibles para Adopción</h1>
+      <h1 className="lusitana_e85447be-module__j818aG__className text-2xl text-green-600">Animales Disponibles para Adopción</h1>
       <div className="overflow-x-auto">
         <div className="inline-block min-w-full align-middle">
           <div className="overflow-hidden rounded-md bg-green-50 p-4 md:pt-0">

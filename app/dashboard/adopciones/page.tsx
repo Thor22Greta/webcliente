@@ -30,7 +30,7 @@ export default async function Page(props: {
 
   return (
     <main>
-      <h1 className="text-2xl font-bold mb-6">Adopciones</h1>
+      <h1 className="lusitana_e85447be-module__j818aG__className text-2xl text-green-600">Adopciones</h1>
 
       {/* Tabla con animales no adoptados */}
       <AdopcionesTable animales={animalesNoAdoptados} />

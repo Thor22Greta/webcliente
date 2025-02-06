@@ -29,7 +29,7 @@ export default function AdoptionForm({ usuarios, animales }: AdoptionFormProps) 
 
   return (
     <div className="mt-8">
-      <h2 className="text-xl mb-4">Formulario de Adopción</h2>
+      <h2 className="lusitana_e85447be-module__j818aG__className text-2xl text-green-600">Formulario de Adopción</h2>
       <form onSubmit={handleAdoptar} className="space-y-4">
         <div>
           <label htmlFor="animal" className="block">Seleccione un animal:</label>

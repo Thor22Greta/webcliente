@@ -1,5 +1,8 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import { obtenerAnimalPorId, actualizarAnimal } from '@/app/lib/actions';
 
 interface Animal {
   id: string;
@@ -7,86 +10,122 @@ interface Animal {
   raza: string;
   edad: number;
   adopted: boolean;
-  adoptante_name: string;
+  customerId: string;
 }
 
 export default function EditForm() {
   const router = useRouter();
-  const { id } = router.query;
   const [animal, setAnimal] = useState<Animal | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Simulando una base de datos de animales
-  const animalesSimulados = [
-    { id: '1', name: 'Fido', raza: 'Labrador', edad: 3, adopted: false, adoptante_name: '' },
-    { id: '2', name: 'Milo', raza: 'Beagle', edad: 2, adopted: true, adoptante_name: 'Juan' },
-  ];
-
-  // Obtener el animal correspondiente por ID
   useEffect(() => {
-    if (id) {
-      const animalEncontrado = animalesSimulados.find((animal) => animal.id === id);
-      if (animalEncontrado) {
-        setAnimal(animalEncontrado);
-      }
-    }
-  }, [id]);
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    console.log('Obteniendo ID:', id);
 
-  const handleSubmit = (e: React.FormEvent) => {
+    if (id) {
+      const fetchAnimal = async () => {
+        try {
+          const data = await obtenerAnimalPorId(id);
+          if (data) {
+            console.log('Animal encontrado:', data);
+            setAnimal(data);
+          } else {
+            console.error('No se encontró el animal');
+          }
+        } catch (error) {
+          console.error('Error al obtener animal:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchAnimal();
+    }
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Datos del animal guardados:', animal);
-    router.push('/dashboard/animales');
+    if (!animal) return;
+    try {
+      await actualizarAnimal(animal);
+      console.log('Animal actualizado con éxito');
+      router.push('/dashboard/animales');
+    } catch (error) {
+      console.error('Error al actualizar animal:', error);
+    }
   };
 
-  if (!animal) {
-    return <div>Cargando...</div>;
-  }
+  if (loading) return <div>Cargando...</div>;
+  if (!animal) return <div>No se encontró el animal</div>;
 
   return (
-    <div>
-      <h1>Editar Animal</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nombre:</label>
-          <input
-            type="text"
-            value={animal.name}
-            onChange={(e) => setAnimal({ ...animal, name: e.target.value })}
-          />
-        </div>
-        <div>
-          <label>Raza:</label>
-          <input
-            type="text"
-            value={animal.raza}
-            onChange={(e) => setAnimal({ ...animal, raza: e.target.value })}
-          />
-        </div>
-        <div>
-          <label>Edad:</label>
-          <input
-            type="number"
-            value={animal.edad}
-            onChange={(e) => setAnimal({ ...animal, edad: parseInt(e.target.value) })}
-          />
-        </div>
-        <div>
-          <label>Adoptado:</label>
-          <input
-            type="checkbox"
-            checked={animal.adopted}
-            onChange={() => setAnimal({ ...animal, adopted: !animal.adopted })}
-          />
-        </div>
-        <div>
-          <label>Adoptante:</label>
-          <input
-            type="text"
-            value={animal.adoptante_name}
-            onChange={(e) => setAnimal({ ...animal, adoptante_name: e.target.value })}
-          />
-        </div>
-        <button type="submit">Guardar Cambios</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <h1 className="text-xl font-bold">Editar Animal</h1>
+
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
+        <input
+          type="text"
+          id="name"
+          value={animal.name}
+          onChange={(e) => setAnimal({ ...animal, name: e.target.value })}
+          required
+          className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-green-500"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="raza" className="block text-sm font-medium text-gray-700">Raza</label>
+        <input
+          type="text"
+          id="raza"
+          value={animal.raza}
+          onChange={(e) => setAnimal({ ...animal, raza: e.target.value })}
+          required
+          className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-green-500"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="edad" className="block text-sm font-medium text-gray-700">Edad</label>
+        <input
+          type="number"
+          id="edad"
+          value={animal.edad}
+          onChange={(e) => setAnimal({ ...animal, edad: Number(e.target.value) })}
+          required
+          className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-green-500"
+        />
+      </div>
+
+      <div className="flex items-center space-x-4">
+        <label htmlFor="adopted" className="text-sm text-gray-700">¿Está adoptado?</label>
+        <input
+          type="checkbox"
+          id="adopted"
+          checked={animal.adopted}
+          onChange={() => setAnimal({ ...animal, adopted: !animal.adopted })}
+          className="w-5 h-5"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="customerId" className="block text-sm font-medium text-gray-700">ID del Adoptante (opcional)</label>
+        <input
+          type="text"
+          id="customerId"
+          value={animal.customerId || ''}
+          onChange={(e) => setAnimal({ ...animal, customerId: e.target.value })}
+          className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-green-500"
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500"
+      >
+        Guardar Cambios
+      </button>
+    </form>
   );
 }
