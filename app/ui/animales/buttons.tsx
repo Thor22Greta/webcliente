@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { eliminarAnimal } from '@/app/lib/actions';
 
 export function EditarAnimal({ id }: { id: number }) {
+  console.log('id', id);
   return (
     <Link
       href={`/dashboard/animales/${id}/editar`}

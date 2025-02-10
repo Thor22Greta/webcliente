@@ -6,31 +6,24 @@ import { Usuario, FormattedAnimalesTable } from '@/app/lib/definitions';
 interface AdoptionFormProps {
   usuarios: Usuario[];
   animales: FormattedAnimalesTable[];
+  adoptarAnimal: (animalId: string, usuarioId: string) => void; 
 }
 
-export default function AdoptionForm({ usuarios, animales }: AdoptionFormProps) {
+export default function AdoptionForm({ usuarios, animales, adoptarAnimal }: AdoptionFormProps) {
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
   const [selectedUsuario, setSelectedUsuario] = useState<string | null>(null);
 
-  const handleAdoptar = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!selectedAnimal || !selectedUsuario) return;
-
-    // Lógica para actualizar el estado del animal a "adoptado"
-    // y asociarlo al usuario (adoptante) en la aplicación.
-    const updatedAnimales = animales.map((animal) =>
-      animal.id === Number(selectedAnimal) ? { ...animal, adoptedBy: selectedUsuario } : animal
-    );
-
-    console.log('Animales actualizados:', updatedAnimales);
-    console.log(`Adoptante: ${selectedUsuario}, Animal: ${selectedAnimal}`);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); 
+    if (selectedAnimal && selectedUsuario) {
+      adoptarAnimal(selectedAnimal, selectedUsuario); 
+    }
   };
 
   return (
     <div className="mt-8">
       <h2 className="lusitana_e85447be-module__j818aG__className text-2xl text-green-600">Formulario de Adopción</h2>
-      <form onSubmit={handleAdoptar} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="animal" className="block">Seleccione un animal:</label>
           <select
@@ -41,7 +34,6 @@ export default function AdoptionForm({ usuarios, animales }: AdoptionFormProps) 
           >
             <option value="">Seleccione un animal</option>
             {animales.map((animal) => {
-              console.log(animal.id); // Verificar que los ID de los animales sean únicos
               return (
                 <option key={animal.id} value={animal.id}>
                   {animal.name}
@@ -61,7 +53,6 @@ export default function AdoptionForm({ usuarios, animales }: AdoptionFormProps) 
           >
             <option value="">Seleccione un adoptante</option>
             {usuarios.map((usuario) => {
-              console.log(usuario.id); // Verificar que los ID de los usuarios sean únicos
               return (
                 <option key={usuario.id} value={usuario.id}>
                   {usuario.name}

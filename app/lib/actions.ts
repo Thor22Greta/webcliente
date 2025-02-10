@@ -7,7 +7,6 @@ import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 
-// Definición del esquema para la creación de donaciones
 const FormSchema = z.object({
   id: z.string(),
   customerId: z.string({
@@ -22,11 +21,9 @@ const FormSchema = z.object({
   date: z.string(),
 });
 
-// Creación y edición de donaciones
 const CrearDonacion = FormSchema.omit({ id: true, date: true });
 const EditarDonacion = FormSchema.omit({ date: true, id: true });
 
-// Tipado de estado
 export type State = {
   errors?: {
     customerId?: string[];
@@ -36,9 +33,7 @@ export type State = {
   message?: string | null; // Permite que 'message' sea null o undefined
 };
 
-// Función para crear una donación
 export async function crearDonacion(prevState: State, formData: FormData) {
-  // Validar los campos del formulario
   const validatedFields = CrearDonacion.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
@@ -57,24 +52,21 @@ export async function crearDonacion(prevState: State, formData: FormData) {
   const date = new Date().toISOString().split('T')[0];
 
   try {
-    // Insertar en la base de datos
+
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date)
       VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `;
   } catch (error) {
-    // Error en la base de datos
     return {
       message: 'Database Error: Failed to Create Invoice.',
     };
   }
 
-  // Revalidar el cache y redirigir
   revalidatePath('/dashboard/donaciones');
   redirect('/dashboard/donaciones');
 }
 
-// Función para editar una donación
 export async function editarDonacion(
   id: string,
   prevState: State,
@@ -110,13 +102,11 @@ export async function editarDonacion(
   redirect('/dashboard/donaciones');
 }
 
-// Función para eliminar una donación
 export async function eliminarDonacion(id: string) {
   await sql`DELETE FROM invoices WHERE id = ${id}`;
   revalidatePath('/dashboard/donaciones');
 }
 
-// Función de autenticación
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
@@ -136,7 +126,6 @@ export async function authenticate(
   }
 }
 
-// Esquema para la creación de usuarios
 const UsuarioFormSchema = z.object({
   name: z.string().min(1, { message: 'El nombre es obligatorio.' }),
   email: z.string().email({ message: 'Debe ser un correo electrónico válido.' }),
@@ -215,23 +204,16 @@ export async function agregarAnimal({
 
 export async function eliminarAnimal(id: string) {
   try {
-    const response = await fetch(`/api/animales/${id}`, {
-      method: 'DELETE', // Método HTTP DELETE
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Hubo un problema al eliminar el animal');
-    }
-
-    // Si todo está bien, puedes devolver una respuesta o manejar la UI de alguna manera
-    alert('Animal eliminado correctamente');
-    window.location.reload(); // Recargar la página para reflejar el cambio
+    await sql`
+      DELETE FROM animales
+      WHERE id = ${id}
+    `;
   } catch (error) {
     console.error('Error al eliminar el animal:', error);
   }
+
+  revalidatePath('/dashboard/animales');
+  redirect('/dashboard/animales');
 }
 
 export async function obtenerAnimalPorId(id: string) {
@@ -249,9 +231,8 @@ export async function obtenerAnimalPorId(id: string) {
   }
 }
 
-// Función para actualizar un animal
 export async function actualizarAnimal(animal: {
-  id: string;
+  id: number;
   name: string;
   raza: string;
   edad: number;

@@ -11,8 +11,8 @@ export default async function AnimalesTable({
 }) {
   return (
     <div className="w-full">
-      <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl text-green-600`}>
-        Animales
+      <h1 className={`${lusitana.className} mb-8 mt-2 text-xl md:text-2xl text-green-600`}>
+        Listado de Animales
       </h1>
       <Search placeholder="Buscando animales..." />
       <div className="mt-6 flow-root">

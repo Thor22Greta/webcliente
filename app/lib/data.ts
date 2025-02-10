@@ -12,15 +12,8 @@ import { formatCurrency } from './utils';
 
 export async function fetchRevenue() {
   try {
-    // Artificially delay a response for demo purposes.
-    // Don't do this in production :)
-
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const data = await sql<Revenue>`SELECT * FROM revenue`;
-
-    // console.log('Data fetch completed after 3 seconds.');
 
     return data.rows;
   } catch (error) {
@@ -51,9 +44,7 @@ export async function fetchUltimasDonaciones() {
 
 export async function fetchCardData() {
   try {
-    // You can probably combine these into a single SQL query
-    // However, we are intentionally splitting them to demonstrate
-    // how to initialize multiple queries in parallel with JS.
+
     const donacionCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const usuarioCountPromise = sql`SELECT COUNT(*) FROM customers`;
     const donacionStatusPromise = sql`SELECT
@@ -155,7 +146,6 @@ export async function fetchDonacionById(id: string) {
 
     const invoices = data.rows.map((invoice) => ({
       ...invoice,
-      // Convert amount from cents to dollars
       amount: invoice.amount / 100,
     }));
 
@@ -221,7 +211,7 @@ export async function fetchFiltradosAnimales(query: string) {
   try {
     const data = await sql<AnimalesTableType>`
       SELECT
-        animales.external_id,
+        animales.id,
         animales.name,
         animales.raza,
         animales.image_url,
@@ -247,15 +237,9 @@ export async function fetchFiltradosAnimales(query: string) {
   }
 }
 
-
-// Ensure this file exports the fetchAnimalesPages function
-
-
-
 export async function fetchAnimalesPages(query: string): Promise<number> {
 
-  // Implementation of the function
 
-  return 10; // Example return value
+  return 10; 
 
 }

@@ -14,19 +14,17 @@ export default async function Page(props: {
   }>;
 }) {
   const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';  // Si no hay búsqueda, usar un string vacío
+  const query = searchParams?.query || '';  
 
-  // Obtener los animales filtrados según el query
   const animales = await fetchFiltradosAnimales(query);
 
   return (
     <main>
+      <h1 className="lusitana_e85447be-module__j818aG__className mb-8 text-xl md:text-2xl text-green-600">ANIMALES</h1>
       <h1 className="lusitana_e85447be-module__j818aG__className mb-8 text-xl md:text-2xl text-green-600">Crear Animal</h1>
 
-      {/* Formulario para crear un nuevo animal */}
       <CrearAnimalForm />
 
-      {/* Tabla con los animales existentes */}
       <AnimalesTable animales={animales} />
     </main>
   );
