@@ -4,16 +4,17 @@ import { useState, useEffect } from 'react';
 import { obtenerAnimalPorId, actualizarAnimal } from '@/app/lib/actions';
 import { Animal } from '@/app/lib/definitions';  
 
-export default function EditarAnimalPage({ params }: { params: { id: string } }) {
+export default function EditarAnimalPage({ params }: { params : Promise<{id: string}> }) {
   const [animal, setAnimal] = useState<Animal | null>(null);  
 
   useEffect(() => {
     async function loadAnimal() {
-      const animalData = await obtenerAnimalPorId(params?.id);
+      const { id } = await params;
+      const animalData = await obtenerAnimalPorId(id);
       setAnimal(animalData);  
     }
     loadAnimal();
-  }, [params.id]);
+  }, [params]);
 
   if (!animal) return <div>Cargando...</div>;
 
