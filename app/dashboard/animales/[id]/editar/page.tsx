@@ -11,7 +11,7 @@ export default function EditarAnimalPage({ params }: { params : Promise<{id: str
     async function loadAnimal() {
       const { id } = await params;
       const animalData = await obtenerAnimalPorId(id);
-      setAnimal(animalData);  
+      setAnimal(animalData as Animal);   
     }
     loadAnimal();
   }, [params]);
