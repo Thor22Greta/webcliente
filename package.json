@@ -28,5 +28,13 @@
     "@types/node": "22.10.1",
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "bcrypt",
+      "bufferutil",
+      "sharp",
+      "utf-8-validate"
+    ]
   }
 }
