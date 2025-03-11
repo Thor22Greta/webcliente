@@ -6,6 +6,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import bcrypt from 'bcrypt';
+
 
 const FormSchema = z.object({
   id: z.string(),
@@ -145,37 +147,37 @@ export type UserState = {
   message?: string | null; // Permite que 'message' sea null o undefined
 };
 
-// Función para crear un usuario
-export async function crearUsuario(prevState: State, formData: FormData) {
-  // Validar los campos del formulario
-  const validatedFields = CrearUsuario.safeParse({
-    name: formData.get('name'),
-    email: formData.get('email'),
-  });
+// // Función para crear un usuario
+// export async function crearUsuario(prevState: State, formData: FormData) {
+//   // Validar los campos del formulario
+//   const validatedFields = CrearUsuario.safeParse({
+//     name: formData.get('name'),
+//     email: formData.get('email'),
+//   });
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Error al crear el usuario.',
-    };
-  }
+//   if (!validatedFields.success) {
+//     return {
+//       errors: validatedFields.error.flatten().fieldErrors,
+//       message: 'Error al crear el usuario.',
+//     };
+//   }
 
-  const { name, email} = validatedFields.data;
+//   const { name, email} = validatedFields.data;
 
-  try {
-    await sql`
-      INSERT INTO users (name, email)
-      VALUES (${name}, ${email})
-    `;
-  } catch (error) {
-    return {
-      message: 'Error en la base de datos al crear el usuario.',
-    };
-  }
+//   try {
+//     await sql`
+//       INSERT INTO users (name, email)
+//       VALUES (${name}, ${email})
+//     `;
+//   } catch (error) {
+//     return {
+//       message: 'Error en la base de datos al crear el usuario.',
+//     };
+//   }
 
-  revalidatePath('/dashboard/usuarios');
-  redirect('/dashboard/usuarios');
-}
+//   revalidatePath('/dashboard/usuarios');
+//   redirect('/dashboard/usuarios');
+// }
 
 export async function agregarAnimal({
   name,
@@ -252,5 +254,32 @@ export async function actualizarAnimal(animal: {
   } catch (error) {
     console.error('Error al actualizar el animal:', error);
     throw new Error('No se pudo actualizar el animal.');
+  }
+}
+
+export async function crearUsuario({
+  name,
+  email,
+  password,
+}: {
+  name: string;
+  email: string;
+  password: string;
+}) {
+  if (!name || !email || !password) {
+    throw new Error('Todos los campos son obligatorios');
+  }
+
+  // Encriptar la contraseña usando bcrypt
+  const hashedPassword = await bcrypt.hash(password, 10); // El número 10 es el "salt rounds" (nivel de seguridad)
+
+  try {
+    await sql`
+      INSERT INTO users (name, email, password)
+      VALUES (${name}, ${email}, ${hashedPassword})
+    `;
+  } catch (error) {
+    console.error('Error en la base de datos al crear usuario:', error);
+    throw new Error('Error en la base de datos al crear el usuario.');
   }
 }
