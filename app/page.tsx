@@ -2,16 +2,27 @@ import AvaLogo from '@/app/ui/avalogo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { lusitana } from '@/app/ui/fonts';
-import { FaInstagram, FaFacebook } from 'react-icons/fa';
+import { FaInstagram, FaFacebook, FaStore } from 'react-icons/fa';
 import Image from 'next/image';
 
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-6">
-      <div className="flex h-20 shrink-0 items-end rounded-lg bg-green-500 p-4 md:h-52">
-        <div className="relative w-32 h-full md:w-36"> {/* Asegura una altura en el padre */}
+      <div className="flex h-20 shrink-0 items-end rounded-lg bg-green-500 p-4 md:h-52 relative">
+        {/* Logo */}
+        <div className="relative w-32 h-full md:w-36">
           <AvaLogo />
         </div>
+        {/* Enlace a la tienda, fijado a la derecha */}
+        <Link 
+          href="https://tu-tienda-online.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-white text-sm md:text-base bg-green-700 px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
+        >
+          <FaStore className="w-5 h-5 md:w-6 md:h-6" />
+          <span>Visita Nuestra Tienda</span>
+        </Link>
       </div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div className="flex flex-col justify-center gap-6 rounded-lg bg-green-200 px-6 py-10 md:w-2/5 md:px-20">
