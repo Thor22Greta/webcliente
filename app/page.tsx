@@ -2,22 +2,35 @@ import AvaLogo from '@/app/ui/avalogo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { lusitana } from '@/app/ui/fonts';
+import { FaInstagram, FaFacebook } from 'react-icons/fa';
 import Image from 'next/image';
 
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-green-500 p-4 md:h-52">
-        <AvaLogo />
+        <div className="relative w-32 h-full md:w-36"> {/* Asegura una altura en el padre */}
+          <AvaLogo />
+        </div>
       </div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div className="flex flex-col justify-center gap-6 rounded-lg bg-green-200 px-6 py-10 md:w-2/5 md:px-20">
           <p
             className={`${lusitana.className} text-xl text-green-800 md:text-3xl md:leading-normal`}
           >
-            <strong>Bienvenido a AVA.</strong> Visita nuestro Instagram{' '}
+            <strong>Bienvenido a AVA.</strong><br />
+            Visita nuestro Instagram{' '}
+            
             <a href="https://www.instagram.com/animalistesvalldalbaida/" className="text-green-500">
-              Animalistes Vall d'Albaida.
+            <FaInstagram className="text-green-500" />Animalistes Vall d'Albaida.
+            </a>
+          </p>
+          <p
+            className={`${lusitana.className} text-xl text-green-800 md:text-3xl md:leading-normal`}
+          >
+            Visita nuestro Facebook{' '}
+            <a href="https://www.facebook.com/p/Animalistes-Vall-dAlbaida-61557054398851/?locale=ca_ES" className="text-green-500">
+            <FaFacebook className="text-green-500" />Animalistes Vall d'Albaida.
             </a>
           </p>
           <Link
