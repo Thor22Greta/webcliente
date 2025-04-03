@@ -32,7 +32,7 @@ export type State = {
     amount?: string[];
     status?: string[];
   };
-  message?: string | null; // Permite que 'message' sea null o undefined
+  message?: string | null; 
 };
 
 export async function crearDonacion(prevState: State, formData: FormData) {
@@ -144,40 +144,8 @@ export type UserState = {
     email?: string[];
     status?: string[];
   };
-  message?: string | null; // Permite que 'message' sea null o undefined
+  message?: string | null; 
 };
-
-// // Función para crear un usuario
-// export async function crearUsuario(prevState: State, formData: FormData) {
-//   // Validar los campos del formulario
-//   const validatedFields = CrearUsuario.safeParse({
-//     name: formData.get('name'),
-//     email: formData.get('email'),
-//   });
-
-//   if (!validatedFields.success) {
-//     return {
-//       errors: validatedFields.error.flatten().fieldErrors,
-//       message: 'Error al crear el usuario.',
-//     };
-//   }
-
-//   const { name, email} = validatedFields.data;
-
-//   try {
-//     await sql`
-//       INSERT INTO users (name, email)
-//       VALUES (${name}, ${email})
-//     `;
-//   } catch (error) {
-//     return {
-//       message: 'Error en la base de datos al crear el usuario.',
-//     };
-//   }
-
-//   revalidatePath('/dashboard/usuarios');
-//   redirect('/dashboard/usuarios');
-// }
 
 export async function agregarAnimal({
   name,
@@ -281,5 +249,33 @@ export async function crearUsuario({
   } catch (error) {
     console.error('Error en la base de datos al crear usuario:', error);
     throw new Error('Error en la base de datos al crear el usuario.');
+  }
+}
+
+export async function adoptarAnimal(
+  animalId: number,
+  adoptanteId: string
+) {
+  const fechaAdopcion = new Date().toISOString().split('T')[0];
+
+  try {
+    // Actualizamos el animal en la tabla "animales"
+    await sql`
+      UPDATE animales
+      SET adopted = true, customer_id = ${adoptanteId}
+      WHERE id = ${animalId}
+    `;
+
+    // Insertamos un registro en la tabla "adopciones"
+    await sql`
+      INSERT INTO adopciones (animal_id, customer_id, fecha_adopcion)
+      VALUES (${animalId}, ${adoptanteId}, ${fechaAdopcion})
+    `;
+
+    // Revalidamos la ruta para que los cambios se reflejen (si usas ISR)
+    revalidatePath('/dashboard/animales');
+  } catch (error) {
+    console.error('Error al adoptar animal:', error);
+    throw new Error('No se pudo adoptar el animal.');
   }
 }

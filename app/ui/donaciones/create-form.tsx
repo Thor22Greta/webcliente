@@ -22,7 +22,7 @@ export default function Form({ usuarios }: { usuarios: UsuarioField[] }) {
         {/* Customer Name */}
         <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Elegir usuario
+            Elegir donante
           </label>
           <div className="relative">
             <select
@@ -33,7 +33,7 @@ export default function Form({ usuarios }: { usuarios: UsuarioField[] }) {
               aria-describedby="customer-error"
             >
               <option value="" disabled>
-                Selecciona un usuario
+                Selecciona un donante
               </option>
               {usuarios.map((usuario) => (
                 <option key={usuario.id} value={usuario.id}>
