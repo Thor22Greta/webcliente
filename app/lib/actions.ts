@@ -153,17 +153,19 @@ export async function agregarAnimal({
   edad,
   adopted,
   customerId,
+  image_url = "/images/logoverde.jpg", // Valor por defecto si no se provee imagen
 }: {
   name: string;
   raza: string;
   edad: number;
   adopted: boolean;
   customerId?: string;
+  image_url?: string;
 }) {
   try {
     await sql`
-      INSERT INTO animales (name, raza, edad, adopted, customer_id)
-      VALUES (${name}, ${raza}, ${edad}, ${adopted}, ${customerId || null})
+      INSERT INTO animales (name, raza, edad, adopted, customer_id, image_url)
+      VALUES (${name}, ${raza}, ${edad}, ${adopted}, ${customerId || null}, ${image_url})
     `;
   } catch (error) {
     console.error('Error al agregar animal:', error);
