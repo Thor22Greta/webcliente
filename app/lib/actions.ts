@@ -279,3 +279,38 @@ export async function adoptarAnimal(
     throw new Error('No se pudo adoptar el animal.');
   }
 }
+
+export async function createUsuario({ name, email, password }: { name: string; email: string; password: string }) {
+  try {
+    await sql`
+      INSERT INTO users (name, email, password)
+      VALUES (${name}, ${email}, ${password})
+    `;
+  } catch (error) {
+    throw new Error('Error al crear el usuario');
+  }
+}
+
+export async function createCustomer({
+  name,
+  email,
+  imageUrl,
+}: {
+  name: string;
+  email: string;
+  imageUrl: string; // Se agrega la URL de la imagen
+}) {
+  if (!name || !email || !imageUrl) {
+    throw new Error('Todos los campos son obligatorios');
+  }
+
+  try {
+    await sql`
+      INSERT INTO customers (name, email, image_url)
+      VALUES (${name}, ${email}, ${imageUrl}) -- Añadimos image_url
+    `;
+  } catch (error) {
+    console.error('Error en la base de datos al crear customer:', error);
+    throw new Error('Error al crear el customer.');
+  }
+}
