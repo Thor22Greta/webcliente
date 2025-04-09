@@ -136,8 +136,6 @@ const UsuarioFormSchema = z.object({
   }),
 });
 
-const CrearUsuario = UsuarioFormSchema.omit({});
-
 export type UserState = {
   errors?: {
     name?: string[];
@@ -241,12 +239,12 @@ export async function crearUsuario({
   }
 
   // Encriptar la contraseña usando bcrypt
-  const hashedPassword = await bcrypt.hash(password, 10); // El número 10 es el "salt rounds" (nivel de seguridad)
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
     await sql`
-      INSERT INTO users (name, email, password)
-      VALUES (${name}, ${email}, ${hashedPassword})
+      INSERT INTO users (name, email, password, "isAdmin")
+      VALUES (${name}, ${email}, ${hashedPassword}, false)
     `;
   } catch (error) {
     console.error('Error en la base de datos al crear usuario:', error);

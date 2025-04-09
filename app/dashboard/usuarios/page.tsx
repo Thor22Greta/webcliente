@@ -1,9 +1,9 @@
 import { fetchFiltradosUsuarios } from '@/app/lib/data';
 import UsuariosTable from '@/app/ui/usuarios/table';
 import { Metadata } from 'next';
-import CreateCustomerForm from '@/app/ui/usuarios/create-usuario-form';  // Importa el formulario de creación
+import CreateCustomerForm from '@/app/ui/usuarios/create-usuario-form';
+import { auth } from '@/auth'; // ✅ usar `auth()` directamente
 
-// Exportar metadata fuera del componente
 export const metadata: Metadata = {
   title: 'Usuarios',
 };
@@ -19,15 +19,18 @@ export default async function Page(props: {
 
   const usuarios = await fetchFiltradosUsuarios(query);
 
+  const session = await auth(); // ✅ nueva forma correcta
+  console.log('Session en la página:', session);
+
   return (
     <main>
-      {/* Formulario de creación de customer */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold">Crear Nuevo Cliente</h2>
-        <CreateCustomerForm />
-      </section>
+      {session?.user?.isAdmin && (
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold">Crear Nuevo Cliente</h2>
+          <CreateCustomerForm />
+        </section>
+      )}
 
-      {/* Tabla de usuarios */}
       <div>
         <UsuariosTable usuarios={usuarios} />
       </div>
