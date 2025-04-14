@@ -19,26 +19,22 @@ export const authConfig = {
     // ✅ JWT: guarda info en el token cuando el usuario inicia sesión
     async jwt({ token, user }) {
       if (user) {
-        console.log('JWT Callback - usuario:', user); // Verifica que user.isAdmin sea true
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
         token.isAdmin = user.isAdmin;
       }
-      console.log('JWT Callback - token:', token);
       return token;
     },
 
     // ✅ Session: expone info del token a la sesión en el cliente
     async session({ session, token }) {
       if (token && session.user) {
-        console.log('Session Callback - token:', token); // Asegúrate que token.isAdmin sea true
         session.user.id = token.id as string;
         session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.isAdmin = token.isAdmin as boolean;
       }
-      console.log('Session Callback - session:', session);
       return session;
     },
 

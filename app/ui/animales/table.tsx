@@ -6,8 +6,10 @@ import { EditarAnimal, EliminarAnimal } from './buttons'; // Los botones serán 
 
 export default async function AnimalesTable({
   animales,
+  isAdmin,
 }: {
   animales: FormattedAnimalesTable[];
+  isAdmin?: boolean;
 }) {
   return (
     <div className="w-full">

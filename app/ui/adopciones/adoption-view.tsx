@@ -33,7 +33,6 @@ export default function AdoptionView({
         adoptado.adopted = true;
         setAnimalesNoAdoptadosState(animalesNoAdoptadosState.filter(animal => animal.id !== idNum));
         setAnimalesAdoptadosState([...animalesAdoptadosState, adoptado]);
-        console.log(`Animal adoptado: ${adoptado.name}, Adoptante: ${usuarioId}`);
       }
     } catch (error) {
       console.error('Error al adoptar el animal:', error);
