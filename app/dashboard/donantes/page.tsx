@@ -1,12 +1,12 @@
 import { fetchFiltradosUsuarios } from '@/app/lib/data';
-import UsuariosTable from '@/app/ui/usuarios/table';
+import UsuariosTable from '@/app/ui/donantes/table';
 import { Metadata } from 'next';
-import CreateCustomerForm from '@/app/ui/usuarios/create-usuario-form';
+import CreateCustomerForm from '@/app/ui/donantes/create-usuario-form';
 import { auth } from '@/auth';
 import { lusitana } from '@/app/ui/fonts'; 
 
 export const metadata: Metadata = {
-  title: 'Usuarios',
+  title: 'Donantes/Adoptantes',
 };
 
 export default async function Page(props: {
@@ -22,11 +22,15 @@ export default async function Page(props: {
   const session = await auth();
 
   return (
+    <main>
+      <h1 className="lusitana_e85447be-module__j818aG__className mb-8 text-xl md:text-2xl text-green-600">
+        DONANTES/ADOPTANTES
+      </h1>
     <div className="w-full">
       {session?.user?.isAdmin && (
         <section className="mb-8">
           <h1 className={`${lusitana.className} text-2xl text-green-600`}>
-            Crear Nuevo Donante
+            Crear Nuevo Donante/Adoptante
           </h1>
           <div className="mt-4">
             <CreateCustomerForm />
@@ -38,5 +42,6 @@ export default async function Page(props: {
         <UsuariosTable usuarios={usuarios} />
       </div>
     </div>
+    </main>
   );
 }

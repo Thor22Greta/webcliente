@@ -2,6 +2,7 @@ import { fetchUsuarios } from '@/app/lib/data';
 import Form from '@/app/ui/donaciones/create-form';
 import Breadcrumbs from '@/app/ui/donaciones/breadcrumbs';
 import { Metadata } from 'next';
+import { auth } from '@/auth'; // 👈 importar auth
 
 export const metadata: Metadata = {
   title: 'Crear Donaciones',
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const usuarios = await fetchUsuarios();
+  const session = await auth(); // 👈 obtener sesión
+  const isAdmin = session?.user?.isAdmin ?? false; // 👈 obtener isAdmin con fallback a false
 
   return (
     <main>
@@ -22,7 +25,7 @@ export default async function Page() {
           },
         ]}
       />
-      <Form usuarios={usuarios} />
+      <Form usuarios={usuarios} isAdmin={isAdmin} />
     </main>
   );
 }

@@ -25,14 +25,14 @@ export default function AdoptionForm({ usuarios, animales, adoptarAnimal }: Adop
       <h2 className="lusitana_e85447be-module__j818aG__className text-2xl text-green-600">Formulario de Adopción</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="animal" className="block">Seleccione un animal:</label>
+          <label htmlFor="animal" className="block">Seleccione un Animal:</label>
           <select
             id="animal"
             value={selectedAnimal || ''}
             onChange={(e) => setSelectedAnimal(e.target.value)}
             className="w-full px-4 py-2 border rounded-md"
           >
-            <option value="">Seleccione un animal</option>
+            <option value="">--ANIMAL--</option>
             {animales.map((animal) => {
               return (
                 <option key={animal.id} value={animal.id}>
@@ -44,14 +44,14 @@ export default function AdoptionForm({ usuarios, animales, adoptarAnimal }: Adop
         </div>
 
         <div>
-          <label htmlFor="usuario" className="block">Seleccione un adoptante:</label>
+          <label htmlFor="usuario" className="block">Seleccione un Adoptante:</label>
           <select
             id="usuario"
             value={selectedUsuario || ''}
             onChange={(e) => setSelectedUsuario(e.target.value)}
             className="w-full px-4 py-2 border rounded-md"
           >
-            <option value="">Seleccione un adoptante</option>
+            <option value="">--ADOPTANTE--</option>
             {usuarios.map((usuario) => {
               return (
                 <option key={usuario.id} value={usuario.id}>

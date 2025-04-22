@@ -11,9 +11,9 @@ export default async function UsuariosTable({
   return (
     <div className="w-full">
       <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl text-green-600`}>
-        Usuarios
+        Donantes/Adoptantes
       </h1>
-      <Search placeholder="Buscando usuarios..." />
+      <Search placeholder="Buscando donantes..." />
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">

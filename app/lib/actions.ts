@@ -314,3 +314,13 @@ export async function createCustomer({
     throw new Error('Error al crear el customer.');
   }
 }
+
+export interface Adoptante {
+  id: string;
+  name: string;
+}
+
+export async function fetchAdoptantes(): Promise<Adoptante[]> {
+  const result = await sql<Adoptante>`SELECT id, name FROM customers ORDER BY name`;
+  return result.rows;
+}

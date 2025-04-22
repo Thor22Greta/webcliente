@@ -24,8 +24,8 @@ export default async function Page(props: {
   const currentPage = Number(searchParams?.page) || 1;
 
   const totalPages = await fetchDonacionesPages(query);
-  const session = await auth(); // Usamos auth() para obtener la sesión
-  const isAdmin = session?.user?.isAdmin; // Esto nos indica si el usuario es admin
+  const session = await auth();
+  const isAdmin = session?.user?.isAdmin;
 
   return (
     <div className="w-full">
@@ -34,15 +34,14 @@ export default async function Page(props: {
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Buscando donaciones..." />
-        {/* Cualquier usuario puede crear una donación */}
+        {/* Puedes modificar CrearDonacion si hace falta pasar isAdmin ahí también */}
         <CrearDonacion />
       </div>
-      
-      {/* En la tabla, le pasamos isAdmin para que controle qué botones mostrar */}
+
       <Suspense key={query + currentPage} fallback={<DonacionesTableSkeleton />}>
         <Table query={query} currentPage={currentPage} isAdmin={isAdmin} />
       </Suspense>
-      
+
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} />
       </div>

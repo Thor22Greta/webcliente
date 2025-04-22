@@ -91,7 +91,7 @@ export default function CreateCustomerForm() {
         >
           Cancelar
         </Link>
-        <Button type="submit">Crear Customer</Button>
+        <Button type="submit">Crear Donante</Button>
       </div>
     </form>
   );

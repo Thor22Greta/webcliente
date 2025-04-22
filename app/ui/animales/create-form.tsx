@@ -1,26 +1,71 @@
 'use client';
 
-import { useState } from 'react';
-import { agregarAnimal } from '@/app/lib/actions';
+import { useState, useEffect } from 'react';
+import { agregarAnimal, fetchAdoptantes } from '@/app/lib/actions';
 
-export default function Form() {
+export default function CrearAnimalForm() {
   const [name, setName] = useState('');
   const [raza, setRaza] = useState('');
   const [edad, setEdad] = useState('');
   const [adopted, setAdopted] = useState(false);
   const [customerId, setCustomerId] = useState('');
+  const [donantes, setDonantes] = useState<{ id: string; name: string }[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  // Carga la lista de donantes/usuarios solo si 'adopted' es true
+  useEffect(() => {
+    async function loadDonantes() {
+      if (adopted) {
+        try {
+          const lista = await fetchAdoptantes();
+          setDonantes(lista);
+        } catch (err) {
+          console.error('No se pudo cargar la lista de adoptantes:', err);
+        }
+      } else {
+        setDonantes([]);
+        setCustomerId('');
+      }
+    }
+    loadDonantes();
+  }, [adopted]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await agregarAnimal({ name, raza, edad: Number(edad), adopted, customerId });
-    window.location.reload();
+
+    if (!name || !raza || Number(edad) <= 0) {
+      setError('Completa todos los campos obligatorios.');
+      return;
+    }
+    if (adopted && !customerId) {
+      setError('Selecciona un adoptante si marcaste "adoptado".');
+      return;
+    }
+
+    try {
+      await agregarAnimal({
+        name,
+        raza,
+        edad: Number(edad),
+        adopted,
+        customerId: adopted ? customerId : undefined,
+      });
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+      setError('Error al agregar el animal.');
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {error && <div className="text-red-500">{error}</div>}
+
       {/* Nombre */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          Nombre
+        </label>
         <input
           type="text"
           id="name"
@@ -34,7 +79,9 @@ export default function Form() {
 
       {/* Raza */}
       <div>
-        <label htmlFor="raza" className="block text-sm font-medium text-gray-700">Raza</label>
+        <label htmlFor="raza" className="block text-sm font-medium text-gray-700">
+          Raza
+        </label>
         <input
           type="text"
           id="raza"
@@ -48,7 +95,9 @@ export default function Form() {
 
       {/* Edad */}
       <div>
-        <label htmlFor="edad" className="block text-sm font-medium text-gray-700">Edad</label>
+        <label htmlFor="edad" className="block text-sm font-medium text-gray-700">
+          Edad
+        </label>
         <input
           type="number"
           id="edad"
@@ -62,7 +111,6 @@ export default function Form() {
 
       {/* Adoptado */}
       <div className="flex items-center space-x-4">
-        <label htmlFor="adopted" className="text-sm text-gray-700">¿Está adoptado?</label>
         <input
           type="checkbox"
           id="adopted"
@@ -70,20 +118,33 @@ export default function Form() {
           onChange={(e) => setAdopted(e.target.checked)}
           className="w-5 h-5"
         />
+        <label htmlFor="adopted" className="text-sm text-gray-700">
+          ¿Está adoptado?
+        </label>
       </div>
 
-      {/* ID del adoptante (opcional) */}
-      <div>
-        <label htmlFor="customerId" className="block text-sm font-medium text-gray-700">ID del Adoptante (opcional)</label>
-        <input
-          type="text"
-          id="customerId"
-          placeholder="ID del adoptante"
-          value={customerId}
-          onChange={(e) => setCustomerId(e.target.value)}
-          className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-        />
-      </div>
+      {/* Selector de adoptante (solo si adopted = true) */}
+      {adopted && (
+        <div>
+          <label htmlFor="customerId" className="block text-sm font-medium text-gray-700">
+            Selecciona Adoptante
+          </label>
+          <select
+            id="customerId"
+            value={customerId}
+            onChange={(e) => setCustomerId(e.target.value)}
+            required
+            className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+            <option value="">-- ADOPTANTE --</option>
+            {donantes.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Botón de envío */}
       <button

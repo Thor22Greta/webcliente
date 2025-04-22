@@ -22,7 +22,7 @@ const links = [
     href: '/dashboard/donaciones',
     icon: DocumentDuplicateIcon,
   },
-  { name: 'Usuarios', href: '/dashboard/usuarios', icon: UserGroupIcon },
+  { name: 'Donantes/Adoptantes', href: '/dashboard/donantes', icon: UserGroupIcon },
   { name: 'Animales', href: '/dashboard/animales', icon: PawPrint},
   { name: 'Eventos', href: '/dashboard/eventos', icon: CalendarHeart },
   { name: 'Adopciones', href: '/dashboard/adopciones', icon: HeartHandshake },
