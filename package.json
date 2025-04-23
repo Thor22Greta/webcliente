@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "start": "next start"
   },
   "dependencies": {
@@ -30,7 +30,8 @@
     "@types/bcrypt": "^5.0.2",
     "@types/node": "22.10.1",
     "@types/react": "19.0.0",
-    "@types/react-dom": "19.0.0"
+    "@types/react-dom": "19.0.0",
+    "ignore-loader": "^0.1.2"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

@@ -243,3 +243,33 @@ export async function fetchAnimalesPages(query: string): Promise<number> {
   return 10; 
 
 }
+export type Event = {
+  id: string;
+  name: string;
+  description: string | null;
+  event_date: string;
+  location: string | null;
+  approved: boolean;
+  created_by: string;
+  created_at: string;
+  creator: string;
+};
+
+export async function fetchEventos(): Promise<Event[]> {
+  const { rows } = await sql<Event>`
+    SELECT 
+      e.id, 
+      e.name, 
+      e.description, 
+      e.event_date, 
+      e.location, 
+      e.approved, 
+      e.created_by, 
+      e.created_at,
+      u.name AS creator
+    FROM eventos e
+    JOIN users u ON e.created_by = u.id
+    ORDER BY e.event_date DESC;
+  `;
+  return rows;
+}

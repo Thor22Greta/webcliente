@@ -4,9 +4,10 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { signIn } from '@/auth';
+import { auth, signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import bcrypt from 'bcrypt';
+
 
 
 const FormSchema = z.object({
@@ -323,4 +324,110 @@ export interface Adoptante {
 export async function fetchAdoptantes(): Promise<Adoptante[]> {
   const result = await sql<Adoptante>`SELECT id, name FROM customers ORDER BY name`;
   return result.rows;
+}
+
+//
+// 1) Esquemas Zod
+//
+const EventSchema = z.object({
+  name: z.string().min(1, { message: 'El nombre es obligatorio.' }),
+  description: z.string().optional(),
+  event_date: z.string().refine((d) => !isNaN(Date.parse(d)), {
+    message: 'Fecha inválida.',
+  }),
+  location: z.string().optional(),
+});
+
+//
+// 2) Crear Evento (siempre sin aprobar) – cualquier usuario logueado
+//
+export async function createEvento(formData: FormData) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect('/login');
+  }
+  const parsed = EventSchema.safeParse({
+    name: formData.get('name'),
+    description: formData.get('description'),
+    event_date: formData.get('event_date'),
+    location: formData.get('location'),
+  });
+  if (!parsed.success) {
+    // Redirigir a la lista mostrando el primer error
+    redirect(`/dashboard/eventos?error=${encodeURIComponent(parsed.error.issues[0].message)}`);
+  }
+  const { name, description, event_date, location } = parsed.data;
+
+  await sql`
+    INSERT INTO eventos (name, description, event_date, location, created_by)
+    VALUES (${name}, ${description}, ${event_date}, ${location}, ${session.user.id})
+  `;
+  revalidatePath('/dashboard/eventos');
+  redirect('/dashboard/eventos');
+}
+
+//
+// 3) Editar Evento – solo Admin
+//
+export async function editEvento(id: string, formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.isAdmin) {
+    redirect('/dashboard/eventos');
+  }
+  const parsed = EventSchema.safeParse({
+    name: formData.get('name'),
+    description: formData.get('description'),
+    event_date: formData.get('event_date'),
+    location: formData.get('location'),
+  });
+  if (!parsed.success) {
+    redirect(`/dashboard/eventos?error=${encodeURIComponent(parsed.error.issues[0].message)}`);
+  }
+  const { name, description, event_date, location } = parsed.data;
+
+  await sql`
+    UPDATE eventos
+    SET name         = ${name},
+        description  = ${description},
+        event_date   = ${event_date},
+        location     = ${location}
+    WHERE id = ${id}
+  `;
+  revalidatePath('/dashboard/eventos');
+  redirect('/dashboard/eventos');
+}
+
+//
+// 4) Aprobar Evento – solo Admin
+//
+export async function approveEvento(id: string) {
+  const session = await auth();
+  if (!session?.user?.isAdmin) {
+    redirect('/dashboard/eventos');
+  }
+
+  await sql`
+    UPDATE eventos
+    SET approved = TRUE
+    WHERE id = ${id}
+  `;
+  revalidatePath('/dashboard/eventos');
+  redirect('/dashboard/eventos');
+}
+
+//
+// 5) Borrar Evento – solo Admin
+//
+export async function deleteEvento(id: string) {
+  const session = await auth();
+  if (!session?.user?.isAdmin) {
+    redirect('/dashboard/eventos');
+  }
+
+  await sql`
+    DELETE FROM eventos
+    WHERE id = ${id}
+  `;
+  revalidatePath('/dashboard/eventos');
+  redirect('/dashboard/eventos');
 }

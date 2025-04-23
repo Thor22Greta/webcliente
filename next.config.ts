@@ -2,29 +2,35 @@ import type { NextConfig } from 'next';
 
 interface WebpackConfig {
   resolve: {
-    fallback: {
-      fs: boolean;
-    };
+    fallback: Record<string, boolean>;
   };
-}
-
-interface CompilerConfig {
-  reactRemoveProperties: boolean;
-  styledComponents: boolean;
+  module: {
+    rules: any[];
+  };
 }
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  webpack: (config: WebpackConfig, { isServer }: { isServer: boolean }) => {
+
+  webpack(config: WebpackConfig, { isServer }) {
     if (!isServer) {
-      config.resolve.fallback = { fs: false };
+      // Excluir módulos nativos de Node del bundle cliente
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+        child_process: false,
+        path: false,
+      };
+      // Ignorar imports de .html en node_modules
+      config.module.rules.push({
+        test: /\.html$/,
+        use: 'ignore-loader',
+      });
     }
     return config;
   },
-  compiler: {
-    reactRemoveProperties: true, // Elimina propiedades problemáticas
-    styledComponents: true, // Si usas styled-components
-  } as CompilerConfig,
 };
 
-module.exports = nextConfig;
+export default nextConfig;
