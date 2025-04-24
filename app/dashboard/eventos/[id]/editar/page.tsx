@@ -1,6 +1,3 @@
-import { fetchEventoById, fetchUsuarios } from '@/app/lib/data';
-import Breadcrumbs from '@/app/ui/eventos/breadcrumbs';
-import EditEventoForm from '@/app/ui/eventos/edit-form';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
@@ -8,22 +5,19 @@ export const metadata: Metadata = {
   title: 'Editar Evento',
 };
 
-export default async function Page({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default async function Page({ params }: PageProps) {
   const { id } = params;
-
-  const evento = await fetchEventoById(id);
-
-  if (!evento) notFound();
+  console.log("ID recibido:", id);
 
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Eventos', href: '/dashboard/eventos' },
-          { label: 'Editar Evento', href: `/dashboard/eventos/${id}/editar`, active: true },
-        ]}
-      />
-      <EditEventoForm evento={evento}/>
+      <h1>Editando el Evento con ID: {id}</h1>
     </main>
   );
 }
