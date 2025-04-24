@@ -12,7 +12,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
 
   const evento = await fetchEventoById(id);
-  const usuarios = await fetchUsuarios();
 
   if (!evento) notFound();
 
@@ -24,7 +23,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           { label: 'Editar Evento', href: `/dashboard/eventos/${id}/editar`, active: true },
         ]}
       />
-      <EditEventoForm evento={evento} usuarios={usuarios} />
+      <EditEventoForm evento={evento}/>
     </main>
   );
 }
