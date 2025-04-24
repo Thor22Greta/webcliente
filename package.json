@@ -40,5 +40,8 @@
       "sharp",
       "utf-8-validate"
     ]
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
