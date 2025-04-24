@@ -1,5 +1,4 @@
-// app/dashboard/eventos/page.tsx
-import { fetchEventos } from '@/app/lib/data';
+import { fetchEventos, fetchUsuarios } from '@/app/lib/data';
 import EventosTable from '@/app/ui/eventos/table';
 import CreateEventoForm from '@/app/ui/eventos/create-evento-form';
 import { Metadata } from 'next';
@@ -11,7 +10,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const eventos = await fetchEventos();
+  const [eventos, usuarios] = await Promise.all([
+    fetchEventos(),
+    fetchUsuarios(),
+  ]);
   const session = await auth();
 
   const isAdmin = Boolean(session?.user?.isAdmin);
@@ -19,9 +21,7 @@ export default async function Page() {
 
   return (
     <main className="space-y-8">
-      <h1 className="lusitana_e85447be-module__j818aG__className text-2xl text-green-600">
-        EVENTOS
-      </h1>
+      <h1 className={`${lusitana.className} text-2xl text-green-600`}>EVENTOS</h1>
 
       {/* Formulario de creación: cualquiera con sesión lo ve */}
       {session?.user && (

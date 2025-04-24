@@ -273,3 +273,25 @@ export async function fetchEventos(): Promise<Event[]> {
   `;
   return rows;
 }
+export async function fetchEventoById(id: string): Promise<Event | null> {
+  try {
+    const { rows } = await sql`
+      SELECT e.id, e.name, e.description, e.event_date, e.location, e.approved, e.created_by, u.name AS creator
+      FROM eventos e
+      JOIN users u ON e.created_by = u.id
+      WHERE e.id = ${id}
+      LIMIT 1;
+    `;
+
+    // Verifica que el resultado no esté vacío y castealo al tipo `Event`
+    if (rows[0]) {
+      const evento = rows[0] as Event; // Hacemos el cast aquí
+      return evento;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error fetching evento by id:', error);
+    return null;
+  }
+}

@@ -431,3 +431,26 @@ export async function deleteEvento(id: string) {
   revalidatePath('/dashboard/eventos');
   redirect('/dashboard/eventos');
 }
+
+export async function updateEvento(id: string, formData: FormData) {
+  const name = formData.get('name') as string;
+  const description = formData.get('description') as string | null;
+  const event_date = formData.get('event_date') as string;
+  const location = formData.get('location') as string | null;
+
+  try {
+    await sql`
+      UPDATE eventos
+      SET name = ${name},
+          description = ${description},
+          event_date = ${event_date},
+          location = ${location}
+      WHERE id = ${id};
+    `;
+
+    revalidatePath('/dashboard/eventos');
+  } catch (error) {
+    console.error('Error al actualizar evento:', error);
+    throw new Error('No se pudo actualizar el evento');
+  }
+}

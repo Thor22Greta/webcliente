@@ -1,12 +1,20 @@
 'use client';
 
-import { createEvento } from '@/app/lib/actions';
+import { Event } from '@/app/lib/data';
+import { editEvento } from '@/app/lib/actions';
 import { Button } from '@/app/ui/button';
 
-export default function CreateEventoForm() {
+export default function EditEventoForm({
+  evento,
+}: {
+  evento: Event;
+}) {
   return (
-    <form action={createEvento} className="bg-green-50 rounded-md p-6 space-y-4">
-      <h3 className="text-xl mb-4 text-green-600 font-semibold">Crear Evento</h3>
+    <form
+      action={(formData: FormData) => editEvento(evento.id, formData)}
+      className="bg-green-50 rounded-md p-6 space-y-4"
+    >
+      <h2 className="text-xl font-semibold text-green-600">Editar Evento</h2>
 
       {/* Nombre */}
       <div>
@@ -15,6 +23,7 @@ export default function CreateEventoForm() {
           id="name"
           name="name"
           type="text"
+          defaultValue={evento.name}
           required
           className="w-full rounded-md border border-green-200 p-2"
         />
@@ -26,6 +35,7 @@ export default function CreateEventoForm() {
         <textarea
           id="description"
           name="description"
+          defaultValue={evento.description || ''}
           className="w-full rounded-md border border-green-200 p-2"
         />
       </div>
@@ -37,6 +47,7 @@ export default function CreateEventoForm() {
           id="event_date"
           name="event_date"
           type="date"
+          defaultValue={new Date(evento.event_date).toISOString().split('T')[0]}
           required
           className="w-full rounded-md border border-green-200 p-2"
         />
@@ -49,12 +60,27 @@ export default function CreateEventoForm() {
           id="location"
           name="location"
           type="text"
+          defaultValue={evento.location || ''}
           className="w-full rounded-md border border-green-200 p-2"
         />
       </div>
 
+      {/* Aprobado */}
+      <div>
+        <label htmlFor="approved" className="block mb-1 text-sm font-medium">Aprobado</label>
+        <select
+          id="approved"
+          name="approved"
+          defaultValue={evento.approved ? 'true' : 'false'}
+          className="w-full rounded-md border border-green-200 p-2"
+        >
+          <option value="true">Sí</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+
       <div className="flex justify-end">
-        <Button type="submit">Crear Evento</Button>
+        <Button type="submit">Guardar Cambios</Button>
       </div>
     </form>
   );

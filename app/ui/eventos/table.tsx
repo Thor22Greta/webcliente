@@ -1,8 +1,9 @@
 'use client';
 
 import { Event } from '@/app/lib/data';
-import { approveEvento, deleteEvento, editEvento } from '@/app/lib/actions';
+import { approveEvento, deleteEvento } from '@/app/lib/actions';
 import { Button } from '@/app/ui/button';
+import { EditarEvento, EliminarEvento } from './buttons';
 
 interface EventosTableProps {
   eventos: Event[];
@@ -31,11 +32,9 @@ export default function EventosTable({ eventos, isAdmin, currentUserId }: Evento
           </thead>
           <tbody className="divide-y divide-green-200">
             {eventos.map((evento) => {
-              // Solo mostramos si está aprobado, o es admin, o es el creador
               const canView = evento.approved || isAdmin || evento.created_by === currentUserId;
               if (!canView) return null;
 
-              // Si no hay fecha, usamos hoy
               const fecha = evento.event_date
                 ? new Date(evento.event_date).toLocaleDateString()
                 : today;
@@ -52,39 +51,16 @@ export default function EventosTable({ eventos, isAdmin, currentUserId }: Evento
                     <td className="px-4 py-2 text-right space-x-2">
                       {!evento.approved && (
                         <form
-                          action={(formData: FormData) =>
-                            approveEvento(formData.get('id') as string)
-                          }
+                          action={() => approveEvento(evento.id)}
                           className="inline"
                         >
-                          <input type="hidden" name="id" value={evento.id} />
                           <Button type="submit" className="bg-green-500 hover:bg-green-600 text-white">
                             Aprobar
                           </Button>
                         </form>
                       )}
-                      <form
-                        action={(formData: FormData) =>
-                          editEvento(formData.get('id') as string, formData)
-                        }
-                        className="inline"
-                      >
-                        <input type="hidden" name="id" value={evento.id} />
-                        <Button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white">
-                          Editar
-                        </Button>
-                      </form>
-                      <form
-                        action={(formData: FormData) =>
-                          deleteEvento(formData.get('id') as string)
-                        }
-                        className="inline"
-                      >
-                        <input type="hidden" name="id" value={evento.id} />
-                        <Button type="submit" className="bg-red-500 hover:bg-red-600 text-white">
-                          Borrar
-                        </Button>
-                      </form>
+                      <EditarEvento id={evento.id} />
+                      <EliminarEvento id={evento.id} />
                     </td>
                   )}
                 </tr>
