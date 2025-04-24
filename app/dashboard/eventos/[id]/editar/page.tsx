@@ -1,7 +1,7 @@
 // app/dashboard/eventos/[id]/editar/page.tsx
 import Breadcrumbs from '@/app/ui/eventos/breadcrumbs';
 import EditEventoForm from '@/app/ui/eventos/edit-form';
-import { fetchEventoById, fetchUsuarios } from '@/app/lib/data';
+import { fetchEventoById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
@@ -11,10 +11,8 @@ export const metadata: Metadata = {
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
-  const [evento, usuarios] = await Promise.all([
-    fetchEventoById(id),
-    fetchUsuarios(),
-  ]);
+
+  const evento = await fetchEventoById(id);
 
   if (!evento) notFound();
 
