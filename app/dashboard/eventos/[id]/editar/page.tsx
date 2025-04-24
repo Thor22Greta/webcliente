@@ -1,7 +1,6 @@
-
+import { fetchEventoById, fetchUsuarios } from '@/app/lib/data';
 import Breadcrumbs from '@/app/ui/eventos/breadcrumbs';
 import EditEventoForm from '@/app/ui/eventos/edit-form';
-import { fetchEventoById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
@@ -13,6 +12,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
 
   const evento = await fetchEventoById(id);
+  const usuarios = await fetchUsuarios();
 
   if (!evento) notFound();
 
@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           { label: 'Editar Evento', href: `/dashboard/eventos/${id}/editar`, active: true },
         ]}
       />
-      <EditEventoForm evento={evento} />
+      <EditEventoForm evento={evento} usuarios={usuarios} />
     </main>
   );
 }
