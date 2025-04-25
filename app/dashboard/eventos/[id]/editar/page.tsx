@@ -8,8 +8,12 @@ export const metadata: Metadata = {
   title: 'Editar Evento',
 };
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const evento = await fetchEventoById(params.id);
+export default async function Page(props:{ params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const id = params.id;
+  const [evento] = await Promise.all([
+    fetchEventoById(id),
+    ]);
 
   if (!evento) return notFound();
 
@@ -20,7 +24,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           { label: 'Eventos', href: '/dashboard/eventos' },
           {
             label: 'Editar Evento',
-            href: `/dashboard/eventos/${params.id}/editar`,
+            href: `/dashboard/eventos/${id}/editar`,
             active: true,
           },
         ]}
