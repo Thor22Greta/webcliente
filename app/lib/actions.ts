@@ -117,15 +117,17 @@ export async function authenticate(
   try {
     await signIn('credentials', formData);
   } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
-          return 'Invalid credentials.';
-        default:
-          return 'Something went wrong.';
-      }
+    // Comprobamos si el error tiene una propiedad `type`
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'type' in error &&
+      (error as any).type === 'CredentialsSignin'
+    ) {
+      return 'Credenciales incorrectas.';
     }
-    throw error;
+
+    return 'Ocurrió un error inesperado al iniciar sesión.';
   }
 }
 
