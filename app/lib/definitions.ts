@@ -1,10 +1,11 @@
 
 export type User = {
-  isAdmin: boolean;
   id: string;
   name: string;
   email: string;
-  password: string;
+  password?: string;
+  isAdmin?: boolean;
+  emailVerified: boolean; 
 };
 
 export type Usuario = {

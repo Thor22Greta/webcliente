@@ -1,8 +1,12 @@
-import NextAuth from 'next-auth';
+import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { authenticateUser } from './auth-utils'; // Importa desde el nuevo archivo
+import { authenticateUser } from './auth-utils';
+import type { User } from './definitions';
+import type { JWT } from 'next-auth/jwt';
+import type { Session } from 'next-auth';
+import type { AdapterUser } from 'next-auth/adapters';
 
-export const authConfig = {
+export const authConfig: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt' as 'jwt',
@@ -12,16 +16,18 @@ export const authConfig = {
     signOut: '/login',
   },
   providers: [
-    CredentialsProvider({
+    CredentialsProvider({ // La configuración del provider va aquí
       name: 'Credentials',
       credentials: {
         email: { label: 'Correo electrónico', type: 'email' },
         password: { label: 'Contraseña', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<User | null> {
         try {
-          const { email, password } = credentials as { email: string; password: string };
-          const user = await authenticateUser(email, password);
+          if (!credentials?.email || !credentials?.password) {
+            return null;
+          }
+          const user = await authenticateUser(credentials.email, credentials.password);
 
           if (user) {
             return user;
@@ -34,25 +40,28 @@ export const authConfig = {
         }
       },
     }),
+    // Puedes agregar otros providers aquí (ej., Google, Facebook, etc.)
   ],
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user }: { token: JWT; user: any }): Promise<JWT> {
       if (user) {
-        token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
-        token.isAdmin = user.isAdmin;
-        token.emailVerified = user.emailVerified;
+        token = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin === true,
+          emailVerified: user.emailVerified,
+        } as JWT;
       }
       return token;
     },
-    async session({ session, token }: any) {
+    async session({ session, token }: { session: Session; token: JWT & { emailVerified?: boolean } }): Promise<Session> {
       if (token && session.user) {
-        session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.isAdmin = token.isAdmin;
-        session.user.emailVerified = token.emailVerified;
+        session.user.id = token.id as string;
+        session.user.name = token.name as string | undefined;
+        session.user.email = token.email as string | undefined;
+        session.user.isAdmin = token.isAdmin as boolean | undefined;
+        session.user.emailVerified = token.emailVerified as boolean | undefined;
       }
       return session;
     },
