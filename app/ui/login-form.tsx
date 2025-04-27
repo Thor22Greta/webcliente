@@ -1,6 +1,6 @@
 'use client';
 
-import { authenticate } from '@/app/lib/actions';
+import { authenticate } from '@/app/lib/client-authenticate';
 import { lusitana } from '@/app/ui/fonts';
 import {
   AtSymbolIcon,
@@ -9,16 +9,54 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
-import { useActionState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Asegúrate de importar useRouter correctamente
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 export default function LoginForm() {
-  const [errorMessage, formAction, isPending] = useActionState(
-    authenticate,
-    undefined,
-  );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
+  const [mounted, setMounted] = useState(false); // Controla si el componente está montado
+  const router = useRouter(); // Llamamos directamente a useRouter aquí
+
+  // Usar useEffect para asegurarnos de que el router solo se usa en el cliente
+  useEffect(() => {
+    setMounted(true); // Cambia el estado a true cuando el componente está montado
+  }, []);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsPending(true);
+
+    const formData = new FormData(event.target as HTMLFormElement);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    const result = await authenticate({ email, password });
+
+    if (result) {
+      setErrorMessage(result);
+    } else {
+      // Asegurarse de que el router está disponible y el componente está montado
+      if (mounted && router) {
+        router.push('/dashboard'); // Uso correcto de router.push
+      }
+    }
+
+    setIsPending(false);
+  };
+
+  // Si el componente no se ha montado en el cliente, no renderizamos nada
+  if (!mounted) {
+    return null;
+  }
 
   return (
-    <form action={formAction} className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <div className="flex-1 rounded-lg bg-green-200 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl text-green-600`}>
           Please log in to continue.

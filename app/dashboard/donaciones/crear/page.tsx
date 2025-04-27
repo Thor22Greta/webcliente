@@ -2,7 +2,7 @@ import { fetchUsuarios } from '@/app/lib/data';
 import Form from '@/app/ui/donaciones/create-form';
 import Breadcrumbs from '@/app/ui/donaciones/breadcrumbs';
 import { Metadata } from 'next';
-import { auth } from '@/auth'; // 👈 importar auth
+import { auth } from '@/app/api/auth/[...nextauth]/route'; // 👈 importar auth
 
 export const metadata: Metadata = {
   title: 'Crear Donaciones',

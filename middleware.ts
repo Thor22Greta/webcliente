@@ -1,9 +1,18 @@
-import NextAuth from 'next-auth';
-import { authConfig } from './auth.config';
+import { NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-export default NextAuth(authConfig).auth;
+export async function middleware(req: any) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+  // Si no hay token, redirigir al inicio de sesión
+  if (!token) {
+    return NextResponse.redirect(new URL('/auth/signin', req.url));
+  }
+
+  // Continuar con la solicitud si hay token
+  return NextResponse.next();
+}
 
 export const config = {
-  // Matcher ignoring `/_next/` and `/api/`
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$|.*\\.jpg$|favicon.ico).*)"],
+  matcher: ['/dashboard', '/profile'],  // Rutas protegidas
 };

@@ -2,7 +2,7 @@ import { fetchFiltradosUsuarios } from '@/app/lib/data';
 import UsuariosTable from '@/app/ui/donantes/table';
 import { Metadata } from 'next';
 import CreateCustomerForm from '@/app/ui/donantes/create-usuario-form';
-import { auth } from '@/auth';
+import { getServerSession } from 'next-auth';
 import { lusitana } from '@/app/ui/fonts'; 
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default async function Page(props: {
   const query = searchParams?.query || '';
 
   const usuarios = await fetchFiltradosUsuarios(query);
-  const session = await auth();
+  const session = await getServerSession();
 
   return (
     <main>

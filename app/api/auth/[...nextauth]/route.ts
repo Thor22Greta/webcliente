@@ -1,10 +1,11 @@
+// app/api/auth/[...nextauth]/route.ts
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
 import { sql } from '@vercel/postgres';
 import { z } from 'zod';
 import type { User } from '@/app/lib/definitions';
-import { authConfig } from './auth.config';
+import { authConfig } from '@/app/lib/auth.config'; // Importa tu configuración
 
 async function getUser(email: string): Promise<User | undefined> {
   try {
@@ -16,9 +17,8 @@ async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
-export const { auth, signIn, signOut } = NextAuth({
-  ...authConfig,
-
+const handler = NextAuth({
+  ...authConfig, // Usa la configuración importada
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -35,14 +35,38 @@ export const { auth, signIn, signOut } = NextAuth({
         const passwordsMatch = await bcrypt.compare(password, user.password);
         if (!passwordsMatch) return null;
 
-        // ✅ Retornamos el usuario con isAdmin para incluirlo en el token
         return {
           id: user.id,
           name: user.name,
           email: user.email,
-          isAdmin: user.isAdmin, // importante para JWT
+          isAdmin: user.isAdmin,
         };
       },
     }),
   ],
+  session: {
+    strategy: 'jwt',
+  },
+  callbacks: {
+    async jwt({ token, user }: any) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.isAdmin = user.isAdmin;
+      }
+      return token;
+    },
+    async session({ session, token }: any) {
+      if (token && session.user) {
+        session.user.id = token.id;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.isAdmin = token.isAdmin;
+      }
+      return session;
+    },
+  },
 });
+
+export { handler as GET, handler as POST };

@@ -7,7 +7,7 @@ import { DonacionesTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
 import { fetchDonacionesPages } from '@/app/lib/data';
 import { Metadata } from 'next';
-import { auth } from '@/auth';
+import { getServerSession } from 'next-auth';
 
 export const metadata: Metadata = {
   title: 'Donaciones',
@@ -24,7 +24,7 @@ export default async function Page(props: {
   const currentPage = Number(searchParams?.page) || 1;
 
   const totalPages = await fetchDonacionesPages(query);
-  const session = await auth();
+  const session = await getServerSession();
   const isAdmin = session?.user?.isAdmin;
 
   return (

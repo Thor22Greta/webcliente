@@ -4,8 +4,7 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { auth, signIn } from '@/auth';
-import { AuthError } from 'next-auth';
+import { getSession } from 'next-auth/react';
 import bcrypt from 'bcrypt';
 
 
@@ -110,7 +109,7 @@ export async function eliminarDonacion(id: string) {
   revalidatePath('/dashboard/donaciones');
 }
 
-export async function authenticate(
+/* export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
 ) {
@@ -129,7 +128,7 @@ export async function authenticate(
 
     return 'Ocurrió un error inesperado al iniciar sesión.';
   }
-}
+} */
 
 const UsuarioFormSchema = z.object({
   name: z.string().min(1, { message: 'El nombre es obligatorio.' }),
@@ -344,7 +343,7 @@ const EventSchema = z.object({
 // 2) Crear Evento (siempre sin aprobar) – cualquier usuario logueado
 //
 export async function createEvento(formData: FormData) {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.user) {
     redirect('/login');
   }
@@ -372,7 +371,7 @@ export async function createEvento(formData: FormData) {
 // 3) Editar Evento – solo Admin
 //
 export async function editEvento(id: string, formData: FormData) {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.user?.isAdmin) {
     redirect('/dashboard/eventos');
   }
@@ -403,7 +402,7 @@ export async function editEvento(id: string, formData: FormData) {
 // 4) Aprobar Evento – solo Admin
 //
 export async function approveEvento(id: string) {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.user?.isAdmin) {
     redirect('/dashboard/eventos');
   }
@@ -421,7 +420,7 @@ export async function approveEvento(id: string) {
 // 5) Borrar Evento – solo Admin
 //
 export async function deleteEvento(id: string) {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.user?.isAdmin) {
     redirect('/dashboard/eventos');
   }

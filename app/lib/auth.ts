@@ -17,7 +17,7 @@ if (!isPasswordValid) throw new Error('Contraseña incorrecta');
 return {
   id: user.id,
   name: user.name,
-  email: user.email as string, // 👈 Forzar tipo
+  email: user.email as string,
   isAdmin: user.is_admin,
   emailVerified: user.email_verified,
 };

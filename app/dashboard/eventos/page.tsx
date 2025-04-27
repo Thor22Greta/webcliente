@@ -2,7 +2,8 @@ import { fetchEventos, fetchUsuarios } from '@/app/lib/data';
 import EventosTable from '@/app/ui/eventos/table';
 import CreateEventoForm from '@/app/ui/eventos/create-evento-form';
 import { Metadata } from 'next';
-import { auth } from '@/auth';
+import { getServerSession } from 'next-auth';
+import { authConfig } from '@/app/lib/auth.config'; // Importa tu configuración
 import { lusitana } from '@/app/ui/fonts';
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ export default async function Page() {
     fetchEventos(),
     fetchUsuarios(),
   ]);
-  const session = await auth();
+  const session = await getServerSession(authConfig);
 
   const isAdmin = Boolean(session?.user?.isAdmin);
   const currentUserId = session?.user?.id ?? '';

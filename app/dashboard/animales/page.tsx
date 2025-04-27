@@ -2,7 +2,7 @@ import { fetchFiltradosAnimales } from '@/app/lib/data';
 import AnimalesTable from '@/app/ui/animales/table';
 import CrearAnimalForm from '@/app/ui/animales/create-form';
 import { Metadata } from 'next';
-import { auth } from '@/auth';
+import { getServerSession } from 'next-auth';
 
 export const metadata: Metadata = {
   title: 'Animales',
@@ -20,7 +20,7 @@ export default async function Page(props: {
   const animales = await fetchFiltradosAnimales(query);
 
   // Obtenemos la sesión para saber si el usuario es admin.
-  const session = await auth();
+  const session = await getServerSession();
   const isAdmin = session?.user?.isAdmin;
 
   return (
