@@ -3,7 +3,7 @@ import EventosTable from '@/app/ui/eventos/table';
 import CreateEventoForm from '@/app/ui/eventos/create-evento-form';
 import { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
-import { authConfig } from '@/app/lib/auth.config'; // Importa tu configuración
+import { authConfig } from '@/app/lib/auth.config'; 
 import { lusitana } from '@/app/ui/fonts';
 
 export const metadata: Metadata = {

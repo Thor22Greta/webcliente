@@ -1,4 +1,3 @@
-// app/ui/eventos/action-buttons.tsx
 'use client';
 
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -9,25 +8,25 @@ export function EditarEvento({ id }: { id?: string }) {
   return (
     <Link
       href={`/dashboard/eventos/${id}/editar`}
-      className="rounded-md border p-2 hover:bg-green-100"
+      className="inline-flex items-center justify-center rounded-md border p-2 hover:bg-green-100"
     >
-      <PencilIcon className="w-5" />
+      <span className="sr-only">Editar</span>
+      <PencilIcon className="w-5 h-5" />
     </Link>
   );
 }
 
 export function EliminarEvento({ id }: { id: string }) {
-  // bindea el id al action correcto
   const handle = deleteEvento.bind(null, id);
 
   return (
-    <form action={handle}>
+    <form className="inline-flex" action={handle}>
       <button
         type="submit"
-        className="rounded-md border p-2 hover:bg-green-100"
+        className="inline-flex items-center justify-center rounded-md border p-2 hover:bg-green-100"
       >
         <span className="sr-only">Eliminar</span>
-        <TrashIcon className="w-5" />
+        <TrashIcon className="w-5 h-5" />
       </button>
     </form>
   );
