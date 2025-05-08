@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import CreateCustomerForm from '@/app/ui/donantes/create-usuario-form';
 import { getServerSession } from 'next-auth';
 import { lusitana } from '@/app/ui/fonts'; 
+import { authConfig } from '@/app/lib/auth.config';
 
 export const metadata: Metadata = {
   title: 'Donantes/Adoptantes',
@@ -19,7 +20,7 @@ export default async function Page(props: {
   const query = searchParams?.query || '';
 
   const usuarios = await fetchFiltradosUsuarios(query);
-  const session = await getServerSession();
+  const session = await getServerSession(authConfig);
 
   return (
     <main>
