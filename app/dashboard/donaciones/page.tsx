@@ -8,6 +8,7 @@ import { Suspense } from 'react';
 import { fetchDonacionesPages } from '@/app/lib/data';
 import { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
+import { authConfig }        from '@/app/lib/auth.config';
 
 export const metadata: Metadata = {
   title: 'Donaciones',
@@ -24,7 +25,7 @@ export default async function Page(props: {
   const currentPage = Number(searchParams?.page) || 1;
 
   const totalPages = await fetchDonacionesPages(query);
-  const session = await getServerSession();
+  const session = await getServerSession(authConfig);
   const isAdmin = session?.user?.isAdmin;
 
   return (

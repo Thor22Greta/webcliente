@@ -1,69 +1,46 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { authenticateUser } from './auth-utils';
-import type { User } from './definitions';
 import type { JWT } from 'next-auth/jwt';
 import type { Session } from 'next-auth';
-import type { AdapterUser } from 'next-auth/adapters';
 
 export const authConfig: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: 'jwt' as 'jwt',
-  },
-  pages: {
-    signIn: '/login',
-    signOut: '/login',
-  },
+  session: { strategy: 'jwt' },
+  pages: { signIn: '/login', signOut: '/login' },
   providers: [
-    CredentialsProvider({ // La configuración del provider va aquí
+    CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: 'Correo electrónico', type: 'email' },
-        password: { label: 'Contraseña', type: 'password' },
+        email:    { label: 'Correo electrónico', type: 'email' },
+        password: { label: 'Contraseña',      type: 'password' },
       },
-      async authorize(credentials): Promise<User | null> {
-        try {
-          if (!credentials?.email || !credentials?.password) {
-            return null;
-          }
-          const user = await authenticateUser(credentials.email, credentials.password);
-
-          if (user) {
-            return user;
-          } else {
-            return null;
-          }
-        } catch (error) {
-          console.error('Error al autenticar usuario:', error);
-          return null;
-        }
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) return null;
+        return authenticateUser(credentials.email, credentials.password);
       },
     }),
-    // Puedes agregar otros providers aquí (ej., Google, Facebook, etc.)
   ],
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user: any }): Promise<JWT> {
+    async jwt({ token, user }: { token: JWT; user?: any }): Promise<JWT> {
       if (user) {
-        token = {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin === true,
-          emailVerified: user.emailVerified,
-        } as JWT;
+        token.id      = user.id;
+        token.name    = user.name;
+        token.email   = user.email;
+        token.isAdmin = user.isAdmin === true;
       }
       return token;
     },
-    async session({ session, token }: { session: Session; token: JWT & { emailVerified?: boolean } }): Promise<Session> {
-      if (token && session.user) {
-        session.user.id = token.id as string;
-        session.user.name = token.name as string | undefined;
-        session.user.email = token.email as string | undefined;
-        session.user.isAdmin = token.isAdmin as boolean | undefined;
-        session.user.emailVerified = token.emailVerified as boolean | undefined;
+    async session({ session, token }: { session: Session; token: JWT }): Promise<Session> {
+      if (session.user) {
+        session.user.id      = token.id as string;
+        session.user.name    = token.name as string;
+        session.user.email   = token.email as string;
+        session.user.isAdmin = token.isAdmin as boolean;
       }
       return session;
     },
   },
 };
+
+export default NextAuth(authConfig);

@@ -7,28 +7,37 @@ export async function authenticateUser(
   password: string | undefined
 ): Promise<User | null> {
   if (!email || !password) {
-    console.error('Correo electrónico o contraseña indefinidos pasados a authenticateUser');
+    console.error('Email o contraseña no válidos');
     return null;
   }
 
-  const safeEmail = email as string;
-  const safePassword = password as string;
+  const safeEmail = email;
+  const safePassword = password;
 
   try {
-    const result = await sql<User>`SELECT * FROM users WHERE email = ${safeEmail}`;
+    // Eliminamos cualquier referencia a email_verified
+    const result = await sql<User>`
+      SELECT
+        id,
+        name,
+        email,
+        password,
+        "isAdmin"
+      FROM users
+      WHERE email = ${safeEmail}
+    `;
     const userRow = result.rows[0];
+    if (!userRow || !userRow.password) return null;
 
-    if (!userRow || !userRow.password) {
-      return null;
-    }
+    const isValid = await bcrypt.compare(safePassword, userRow.password);
+    if (!isValid) return null;
 
-    const passwordsMatch = await bcrypt.compare(safePassword, userRow.password as string);
-
-    if (passwordsMatch) {
-      return userRow;
-    }
-
-    return null;
+    return {
+      id:      userRow.id,
+      name:    userRow.name,
+      email:   userRow.email,
+      isAdmin: userRow.isAdmin === true,
+    };
   } catch (error) {
     console.error('Failed to authenticate user:', error);
     return null;
