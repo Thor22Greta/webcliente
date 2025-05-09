@@ -54,14 +54,14 @@ export default function Page() {
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
           {/* Add Hero Images Here */}
           <Image
-            src="/opengraph-ava.jpg"
+            src="/opengraph-ava2.jpg"
             width={1000}
             height={760}
             alt="Screenshots of the dashboard project showing desktop version"
             className="hidden md:block"
           />
           <Image
-            src="/opengraph-ava.jpg"
+            src="/opengraph-ava2.jpg"
             width={560}
             height={620}
             alt="Screenshot of the dashboard project showing mobile version"
