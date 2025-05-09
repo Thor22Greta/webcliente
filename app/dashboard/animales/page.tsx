@@ -1,43 +1,35 @@
 import { fetchFiltradosAnimales } from '@/app/lib/data';
 import AnimalesTable from '@/app/ui/animales/table';
 import CrearAnimalForm from '@/app/ui/animales/create-form';
-import { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
 import { authConfig } from '@/app/lib/auth.config';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'Animales',
-};
-
-export default async function Page(props: {
-  searchParams?: Promise<{
-    query?: string;
-    page?: string;
-  }>;
-}) {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';  
-
-  const animales = await fetchFiltradosAnimales(query);
-
-  // Obtenemos la sesión para saber si el usuario es admin.
+export default async function Page() {
   const session = await getServerSession(authConfig);
-  const isAdmin = session?.user?.isAdmin;
+
+  // 1. Guard: si no hay sesión o no hay user.id, redirige.
+  if (!session?.user?.id) {
+    redirect('/login');
+  }
+
+  // 2. A este punto TS sabe que session.user.id es un string
+  const userId: string = session.user.id;
+  const isAdmin = session.user.isAdmin ?? false;
+  const animales = await fetchFiltradosAnimales('');
 
   return (
     <main>
-      <h1 className="lusitana_e85447be-module__j818aG__className mb-8 text-xl md:text-2xl text-green-600">
-        ANIMALES
-      </h1>
-      
-      {/* Siempre se muestra la sección de creación y búsqueda */}
-      <h1 className="lusitana_e85447be-module__j818aG__className mb-8 text-xl md:text-2xl text-green-600">
-        Crear Animal
-      </h1>
-      <CrearAnimalForm />
+      <h1 className="text-2xl text-green-600 mb-4">Animales</h1>
 
-      {/* Se pasa el prop isAdmin a la tabla */}
-      <AnimalesTable animales={animales} isAdmin={isAdmin} />
+      {/* Aquí ya pasa un string limpio */}
+      <CrearAnimalForm userId={userId} />
+
+      <AnimalesTable 
+        animales={animales} 
+        isAdmin={isAdmin} 
+        userId={userId} 
+      />
     </main>
   );
 }

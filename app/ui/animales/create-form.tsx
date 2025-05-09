@@ -3,7 +3,11 @@
 import { useState, useEffect } from 'react';
 import { agregarAnimal, fetchAdoptantes } from '@/app/lib/actions';
 
-export default function CrearAnimalForm() {
+interface CrearAnimalFormProps {
+  userId: string;
+}
+
+export default function CrearAnimalForm({ userId }: CrearAnimalFormProps) {
   const [name, setName] = useState('');
   const [raza, setRaza] = useState('');
   const [edad, setEdad] = useState('');
@@ -12,7 +16,6 @@ export default function CrearAnimalForm() {
   const [donantes, setDonantes] = useState<{ id: string; name: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // Carga la lista de donantes/usuarios solo si 'adopted' es true
   useEffect(() => {
     async function loadDonantes() {
       if (adopted) {
@@ -49,6 +52,7 @@ export default function CrearAnimalForm() {
         edad: Number(edad),
         adopted,
         customerId: adopted ? customerId : undefined,
+        created_by: userId,  
       });
       window.location.reload();
     } catch (err) {

@@ -21,6 +21,7 @@ export type Animal = {
   edad: number;
   image_url: string;
   adopted: boolean;
+  customer_id?: string;
 };
 
 export type Donacion = {
@@ -127,6 +128,7 @@ export interface FormattedAnimalesTable {
   adopted: boolean;
   customer_id: string | null;
   adoptante_name: string | null; 
+  created_by: string;
 }
 
 export type UsuarioField = {

@@ -153,7 +153,8 @@ export async function agregarAnimal({
   edad,
   adopted,
   customerId,
-  image_url = "/images/logoverde.jpg", // Valor por defecto si no se provee imagen
+  image_url = "/images/logoverde.jpg", // Valor por defecto
+  created_by,
 }: {
   name: string;
   raza: string;
@@ -161,11 +162,12 @@ export async function agregarAnimal({
   adopted: boolean;
   customerId?: string;
   image_url?: string;
+  created_by: string; 
 }) {
   try {
     await sql`
-      INSERT INTO animales (name, raza, edad, adopted, customer_id, image_url)
-      VALUES (${name}, ${raza}, ${edad}, ${adopted}, ${customerId || null}, ${image_url})
+      INSERT INTO animales (name, raza, edad, adopted, customer_id, image_url, created_by)
+      VALUES (${name}, ${raza}, ${edad}, ${adopted}, ${customerId || null}, ${image_url}, ${created_by})
     `;
   } catch (error) {
     console.error('Error al agregar animal:', error);
@@ -176,16 +178,12 @@ export async function agregarAnimal({
 
 export async function eliminarAnimal(id: string) {
   try {
-    await sql`
-      DELETE FROM animales
-      WHERE id = ${id}
-    `;
+    await sql`DELETE FROM animales WHERE id = ${id}`;
+    revalidatePath('/dashboard/animales');
   } catch (error) {
     console.error('Error al eliminar el animal:', error);
   }
 
-  revalidatePath('/dashboard/animales');
-  redirect('/dashboard/animales');
 }
 
 export async function obtenerAnimalPorId(id: string) {
