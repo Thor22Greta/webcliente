@@ -1,4 +1,3 @@
-// app/dashboard/eventos/crear/page.tsx
 import Breadcrumbs from '@/app/ui/eventos/breadcrumbs';
 import CreateEventoForm from '@/app/ui/eventos/create-evento-form';
 import { fetchUsuarios } from '@/app/lib/data';

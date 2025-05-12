@@ -10,7 +10,7 @@ import {
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Asegúrate de importar useRouter correctamente
+import { useRouter } from 'next/navigation'; 
 
 interface FormData {
   email: string;
@@ -43,7 +43,7 @@ export default function LoginForm() {
     } else {
       // Asegurarse de que el router está disponible y el componente está montado
       if (mounted && router) {
-        router.push('/dashboard'); // Uso correcto de router.push
+        router.push('/dashboard'); 
       }
     }
 

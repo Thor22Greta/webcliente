@@ -1,4 +1,3 @@
-// app/dashboard/animales/[id]/editar/page.tsx
 import React from 'react';
 import { obtenerAnimalPorId } from '@/app/lib/actions';
 import EditarAnimalForm from '@/app/ui/animales/editar-animal-form';

@@ -8,12 +8,11 @@ import { redirect } from 'next/navigation';
 export default async function Page() {
   const session = await getServerSession(authConfig);
 
-  // 1. Guard: si no hay sesión o no hay user.id, redirige.
+  // Si no hay sesión o no hay user.id, redirige.
   if (!session?.user?.id) {
     redirect('/login');
   }
 
-  // 2. A este punto TS sabe que session.user.id es un string
   const userId: string = session.user.id;
   const isAdmin = session.user.isAdmin ?? false;
   const animales = await fetchFiltradosAnimales('');

@@ -29,8 +29,6 @@ export type Donacion = {
   usuario_id: string;
   amount: number;
   date: string;
-  // In TypeScript, this is called a string union type.
-  // It means that the "status" property can only be one of the two strings: 'pending' or 'paid'.
   status: 'pending' | 'paid';
 };
 
@@ -39,7 +37,6 @@ export type Revenue = {
   revenue: number;
 };
 
-// Definimos un tipo de adopción
 export type Adopcion = {
   cliente_id: string;
   animal_id: number;
@@ -48,7 +45,6 @@ export type Adopcion = {
   fecha_adopcion: string;
 };
 
-// Para un "nuevo card" en el slider de animales adoptados
 export type AdoptionCard = {
   cliente_id: string;
   cliente_nombre: string;
@@ -70,7 +66,6 @@ export type UltimasDonaciones = {
   amount: string;
 };
 
-// The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type UltimasDonacionesRaw = Omit<UltimasDonaciones, 'amount'> & {
   amount: number;
 };

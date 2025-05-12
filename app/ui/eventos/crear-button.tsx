@@ -1,4 +1,3 @@
-// app/ui/eventos/crear-button.tsx
 'use client';
 
 import Link from 'next/link';

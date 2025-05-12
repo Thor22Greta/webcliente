@@ -4,10 +4,9 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { authConfig } from '@/app/lib/auth.config';
 import bcrypt from 'bcrypt';
-
-
 
 const FormSchema = z.object({
   id: z.string(),
@@ -109,27 +108,6 @@ export async function eliminarDonacion(id: string) {
   revalidatePath('/dashboard/donaciones');
 }
 
-/* export async function authenticate(
-  prevState: string | undefined,
-  formData: FormData,
-) {
-  try {
-    await signIn('credentials', formData);
-  } catch (error) {
-    // Comprobamos si el error tiene una propiedad `type`
-    if (
-      typeof error === 'object' &&
-      error !== null &&
-      'type' in error &&
-      (error as any).type === 'CredentialsSignin'
-    ) {
-      return 'Credenciales incorrectas.';
-    }
-
-    return 'Ocurrió un error inesperado al iniciar sesión.';
-  }
-} */
-
 const UsuarioFormSchema = z.object({
   name: z.string().min(1, { message: 'El nombre es obligatorio.' }),
   email: z.string().email({ message: 'Debe ser un correo electrónico válido.' }),
@@ -153,7 +131,7 @@ export async function agregarAnimal({
   edad,
   adopted,
   customerId,
-  image_url = "/images/logoverde.jpg", // Valor por defecto
+  image_url = "/images/logoverde.jpg", 
   created_by,
 }: {
   name: string;
@@ -325,23 +303,22 @@ export async function fetchAdoptantes(): Promise<Adoptante[]> {
   return result.rows;
 }
 
-//
-// 1) Esquemas Zod
+// 1) Esquemas Zod para Eventos
 //
 const EventSchema = z.object({
   name: z.string().min(1, { message: 'El nombre es obligatorio.' }),
   description: z.string().optional(),
-  event_date: z.string().refine((d) => !isNaN(Date.parse(d)), {
-    message: 'Fecha inválida.',
-  }),
+  event_date: z
+    .string()
+    .refine((d) => !isNaN(Date.parse(d)), { message: 'Fecha inválida.' }),
   location: z.string().optional(),
 });
 
 //
-// 2) Crear Evento (siempre sin aprobar) – cualquier usuario logueado
+// 2) Crear Evento – cualquier usuario logueado
 //
 export async function createEvento(formData: FormData) {
-  const session = await getSession();
+  const session = await getServerSession(authConfig);
   if (!session?.user) {
     redirect('/login');
   }
@@ -352,11 +329,13 @@ export async function createEvento(formData: FormData) {
     location: formData.get('location'),
   });
   if (!parsed.success) {
-    // Redirigir a la lista mostrando el primer error
-    redirect(`/dashboard/eventos?error=${encodeURIComponent(parsed.error.issues[0].message)}`);
+    redirect(
+      `/dashboard/eventos?error=${encodeURIComponent(
+        parsed.error.issues[0].message
+      )}`
+    );
   }
   const { name, description, event_date, location } = parsed.data;
-
   await sql`
     INSERT INTO eventos (name, description, event_date, location, created_by)
     VALUES (${name}, ${description}, ${event_date}, ${location}, ${session.user.id})
@@ -369,7 +348,7 @@ export async function createEvento(formData: FormData) {
 // 3) Editar Evento – solo Admin
 //
 export async function editEvento(id: string, formData: FormData) {
-  const session = await getSession();
+  const session = await getServerSession(authConfig);
   if (!session?.user?.isAdmin) {
     redirect('/dashboard/eventos');
   }
@@ -380,16 +359,19 @@ export async function editEvento(id: string, formData: FormData) {
     location: formData.get('location'),
   });
   if (!parsed.success) {
-    redirect(`/dashboard/eventos?error=${encodeURIComponent(parsed.error.issues[0].message)}`);
+    redirect(
+      `/dashboard/eventos?error=${encodeURIComponent(
+        parsed.error.issues[0].message
+      )}`
+    );
   }
   const { name, description, event_date, location } = parsed.data;
-
   await sql`
     UPDATE eventos
-    SET name         = ${name},
-        description  = ${description},
-        event_date   = ${event_date},
-        location     = ${location}
+    SET name        = ${name},
+        description = ${description},
+        event_date  = ${event_date},
+        location    = ${location}
     WHERE id = ${id}
   `;
   revalidatePath('/dashboard/eventos');
@@ -400,11 +382,10 @@ export async function editEvento(id: string, formData: FormData) {
 // 4) Aprobar Evento – solo Admin
 //
 export async function approveEvento(id: string) {
-  const session = await getSession();
+  const session = await getServerSession(authConfig);
   if (!session?.user?.isAdmin) {
     redirect('/dashboard/eventos');
   }
-
   await sql`
     UPDATE eventos
     SET approved = TRUE
@@ -418,38 +399,14 @@ export async function approveEvento(id: string) {
 // 5) Borrar Evento – solo Admin
 //
 export async function deleteEvento(id: string) {
-  const session = await getSession();
+  const session = await getServerSession(authConfig);
   if (!session?.user?.isAdmin) {
     redirect('/dashboard/eventos');
   }
-
   await sql`
     DELETE FROM eventos
     WHERE id = ${id}
   `;
   revalidatePath('/dashboard/eventos');
   redirect('/dashboard/eventos');
-}
-
-export async function updateEvento(id: string, formData: FormData) {
-  const name = formData.get('name') as string;
-  const description = formData.get('description') as string | null;
-  const event_date = formData.get('event_date') as string;
-  const location = formData.get('location') as string | null;
-
-  try {
-    await sql`
-      UPDATE eventos
-      SET name = ${name},
-          description = ${description},
-          event_date = ${event_date},
-          location = ${location}
-      WHERE id = ${id};
-    `;
-
-    revalidatePath('/dashboard/eventos');
-  } catch (error) {
-    console.error('Error al actualizar evento:', error);
-    throw new Error('No se pudo actualizar el evento');
-  }
 }

@@ -1,4 +1,3 @@
-// Mantener solo la autenticación, sin hooks
 import { signIn } from 'next-auth/react';
 
 export async function authenticate(data: { email: string; password: string }): Promise<string | null> {
@@ -7,7 +6,7 @@ export async function authenticate(data: { email: string; password: string }): P
   const result = await signIn('credentials', {
     email,
     password,
-    redirect: false,  // No hacer redirección aquí
+    redirect: false,  // No hacer redirección
   });
 
   if (result?.error) {
@@ -17,6 +16,6 @@ export async function authenticate(data: { email: string; password: string }): P
     return 'Ocurrió un error inesperado al iniciar sesión.';
   }
 
-  // Si el login es exitoso, no hacer redirección aquí
+  // Si el login es exitoso, no hacer redirección
   return null;
 }

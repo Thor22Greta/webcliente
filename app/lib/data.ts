@@ -5,7 +5,6 @@ import {
   DonacionForm,
   DonacionesTable,
   UltimasDonacionesRaw,
-  AnimalesTableType,
   Revenue,
   FormattedAnimalesTable,
 } from './definitions';
@@ -274,9 +273,8 @@ export async function fetchEventoById(id: string): Promise<Event | null> {
       LIMIT 1;
     `;
 
-    // Verifica que el resultado no esté vacío y castealo al tipo `Event`
     if (rows[0]) {
-      const evento = rows[0] as Event; // Hacemos el cast aquí
+      const evento = rows[0] as Event; 
       return evento;
     }
 

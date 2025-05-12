@@ -1,4 +1,3 @@
-// app/ui/eventos/breadcrumbs.tsx
 'use client';
 
 import Link from 'next/link';
